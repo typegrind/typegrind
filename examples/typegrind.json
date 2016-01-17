@@ -1,0 +1,10 @@
+{
+	"mapping": {
+		"/usr/include": "/home/dutow/out/system/",
+		"/home/dutow/typegrind/examples": "/home/dutow/out/examples/"
+	},
+	"watch": [
+		"ClName.*",
+		"std::vector.*"
+	]
+}
