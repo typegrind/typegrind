@@ -7,6 +7,7 @@
            remote="github"
            sync-j="4" />
 
+  <project name="typegrind/typegrind" remote="github" path="." />
 
   <project name="llvm-mirror/llvm.git" remote="github" path="vendor/llvm/" revision="release_38" />
   <project name="typegrind/clang.git" remote="github" path="vendor/llvm/tools/clang" revision="release_38" />
