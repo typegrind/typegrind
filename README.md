@@ -19,7 +19,7 @@ Typegrind can be built as part of the clang build process. This repository makes
 To checkout and build everything execute:
 
 ```bash
-repo init -u "https://github.com/typegrind/typegrind.git"
+repo init -u "https://github.com/typegrind/repo.git"
 repo sync
 cd build
 cmake ../
