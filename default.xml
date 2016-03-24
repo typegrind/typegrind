@@ -13,6 +13,7 @@
   <project name="typegrind/clang-tools-extra.git" remote="github" path="vendor/llvm/tools/clang/tools/extra" revision="release_38" />
   <project name="llvm-mirror/compiler-rt.git" remote="github" path="vendor/llvm/projects/compiler-rt" revision="release_38" />
   <project name="llvm-mirror/libcxx.git" remote="github" path="vendor/llvm/projects/libcxx" revision="release_38" />
+  <project name="llvm-mirror/libcxxabi.git" remote="github" path="vendor/llvm/projects/libcxxabi" revision="release_38" />
 
 
   <project name="typegrind/clang-typegrind.git" remote="github" path="typegrind/clang-typegrind"> 
