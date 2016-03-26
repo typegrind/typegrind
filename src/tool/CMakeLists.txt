@@ -1,6 +1,8 @@
 
 file( GLOB_RECURSE COMMON_SOURCES ../common/*.cpp ../util/*.cpp )
 
+include_directories(${Boost_INCLUDE_DIRS}) 
+
 add_clang_executable(clang-typegrind
   ${COMMON_SOURCES}
   CompilerLikeOptionsParser.cpp
