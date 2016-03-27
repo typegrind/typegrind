@@ -2,7 +2,7 @@
 #pragma once
 
 #include "DirectoryMapper.h"
-#include "RegexSet.h"
+#include "MethodMatcher.h"
 
 class AppConfig
 {
@@ -10,11 +10,11 @@ public:
   AppConfig(std::string filename);
 
   typegrind::DirectoryMapper const& getDirectoryMapping() const;
-  typegrind::RegexSet const& getRegexSet() const;
+  typegrind::MethodMatcher const& getMethodMatcher() const;
   bool isValid() const;
   std::string getErrorMessage() const;
 private:
   typegrind::DirectoryMapper mapping;
-  typegrind::RegexSet regexes;
+  typegrind::MethodMatcher methodMatches;
   std::string errorMessage;
 };

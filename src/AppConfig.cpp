@@ -67,7 +67,7 @@ AppConfig::AppConfig(std::string filename)
 
     for (auto const& r : watchConfig)
     {
-      regexes.add(r.to_str()); // TODO: type check
+      methodMatches.add({ r.to_str(), "", 0 }); // TODO: type check
     }
   }
   catch(std::out_of_range oor)
@@ -91,7 +91,7 @@ typegrind::DirectoryMapper const& AppConfig::getDirectoryMapping() const
   return mapping;
 }
 
-typegrind::RegexSet const& AppConfig::getRegexSet() const
+typegrind::MethodMatcher const& AppConfig::getMethodMatcher() const
 {
-  return regexes;
+  return methodMatches;
 }

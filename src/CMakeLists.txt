@@ -5,7 +5,7 @@ include_directories(${TYPEGRIND_ROOT}/vendor/picojson/)
 
 add_library(typegrind-core STATIC
   AppConfig.cpp
-  RegexSet.cpp
+  MethodMatcher.cpp
   DirectoryMapper.cpp
   DirectoryMapping.cpp
 )
