@@ -10,7 +10,7 @@ namespace typegrind
   class CopierAstConsumer : public AllocationASTConsumer
   {
   public:
-    CopierAstConsumer(clang::Rewriter*& rewriter, DirectoryMapper mapper, RegexSet const& regexes);
+    CopierAstConsumer(clang::Rewriter*& rewriter, DirectoryMapper mapper, MethodMatcher const& matchers);
   protected:
     void processRewriterData(clang::Rewriter*& rewriter) override;
 

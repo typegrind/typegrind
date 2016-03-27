@@ -21,13 +21,13 @@ using namespace clang;
 
 namespace typegrind{
 
-    AllocationASTConsumer::AllocationASTConsumer(clang::Rewriter*& rewriter, RegexSet const& regexes)
+    AllocationASTConsumer::AllocationASTConsumer(clang::Rewriter*& rewriter, MethodMatcher const& matchers)
             : mRewriter(rewriter)
-            , mRegexes(regexes)
+            , mMatchers(matchers)
             , mNewExprHandler(mRewriter)
             , mOpNewExprHandler(mRewriter)
             , mDeleteExprHandler(mRewriter)
-            , mMethodDeclHandler(mRewriter, mRegexes)
+            , mMethodDeclHandler(mRewriter, mMatchers)
 
     {
         using namespace ast_matchers;

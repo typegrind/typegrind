@@ -12,7 +12,7 @@ namespace typegrind {
       }
 
 
-      AllocationDecoratorAction::AllocationDecoratorAction(RegexSet const& regexes) : mRewriter(nullptr), mRegexes(regexes) { }
+      AllocationDecoratorAction::AllocationDecoratorAction(MethodMatcher const& matchers) : mRewriter(nullptr), mMatchers(matchers) { }
 
       bool AllocationDecoratorAction::isCpp(clang::CompilerInstance const& Compiler) {
           clang::LangOptions const Opts = Compiler.getLangOpts();

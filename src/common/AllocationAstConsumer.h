@@ -12,12 +12,12 @@
 #include "common/handler/OpNewExprHandler.h"
 #include "common/handler/DeleteExprHandler.h"
 #include "common/handler/MethodDeclHandler.h"
-#include "RegexSet.h"
+#include "MethodMatcher.h"
 
 namespace typegrind {
     class AllocationASTConsumer : public clang::ASTConsumer {
     public:
-        AllocationASTConsumer(clang::Rewriter*& rewriter, RegexSet const& regexes);
+        AllocationASTConsumer(clang::Rewriter*& rewriter, MethodMatcher const& matchers);
 
         void HandleTranslationUnit(clang::ASTContext& context) override;
 
@@ -29,7 +29,7 @@ namespace typegrind {
 
         clang::Rewriter*& mRewriter;
 
-        RegexSet const& mRegexes;
+        MethodMatcher const& mMatchers;
 
         NewExprHandler mNewExprHandler;
         OpNewExprHandler mOpNewExprHandler;

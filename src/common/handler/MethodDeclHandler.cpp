@@ -6,9 +6,9 @@
 namespace typegrind
 {
 
-      MethodDeclHandler::MethodDeclHandler(clang::Rewriter*& rewriter, RegexSet const& regexes)
+      MethodDeclHandler::MethodDeclHandler(clang::Rewriter*& rewriter, MethodMatcher const& matchers)
               : mRewriter(rewriter)
-              , mRegexes(regexes)
+              , mMatchers(matchers)
       {
       }
 
@@ -32,7 +32,7 @@ namespace typegrind
           prettyNameStream.flush();
         }
 
-        if(!mRegexes.matches(prettyName)) return;
+        if(!mMatchers.matches(prettyName)) return;
 
         //if(mVisited.find(prettyName) != mVisited.end()) return;
         //mVisited.insert(prettyName);
