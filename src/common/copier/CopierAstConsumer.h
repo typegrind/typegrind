@@ -2,7 +2,7 @@
 #pragma once
 
 #include "common/AllocationAstConsumer.h"
-#include "common/copier/DirectoryMapper.h"
+#include "DirectoryMapper.h"
 
 namespace typegrind
 {

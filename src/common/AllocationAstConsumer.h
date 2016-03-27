@@ -12,7 +12,7 @@
 #include "common/handler/OpNewExprHandler.h"
 #include "common/handler/DeleteExprHandler.h"
 #include "common/handler/MethodDeclHandler.h"
-#include "util/RegexSet.h"
+#include "RegexSet.h"
 
 namespace typegrind {
     class AllocationASTConsumer : public clang::ASTConsumer {

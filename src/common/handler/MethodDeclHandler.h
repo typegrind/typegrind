@@ -4,7 +4,7 @@
 #include <clang/ASTMatchers/ASTMatchFinder.h>
 #include <clang/Rewrite/Core/Rewriter.h>
 
-#include "util/RegexSet.h"
+#include "RegexSet.h"
 
 namespace typegrind {
     class MethodDeclHandler : public clang::ast_matchers::MatchFinder::MatchCallback {

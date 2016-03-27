@@ -10,7 +10,7 @@
 #include <clang/Frontend/CompilerInstance.h>
 
 #include "common/AllocationAstConsumer.h"
-#include "util/RegexSet.h"
+#include "RegexSet.h"
 
 namespace typegrind {
 
