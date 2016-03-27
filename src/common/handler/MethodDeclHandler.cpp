@@ -32,14 +32,7 @@ namespace typegrind
           prettyNameStream.flush();
         }
 
-        try
-        {
-          if(!mRegexes.matches(prettyName)) return;
-        }
-        catch(...)
-        {
-          return;
-        }
+        if(!mRegexes.matches(prettyName)) return;
 
         //if(mVisited.find(prettyName) != mVisited.end()) return;
         //mVisited.insert(prettyName);
