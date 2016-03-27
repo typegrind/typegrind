@@ -5,7 +5,6 @@ include_directories(${Boost_INCLUDE_DIRS})
 
 add_clang_executable(clang-typegrind
   ${COMMON_SOURCES}
-  CompilerLikeOptionsParser.cpp
   AppConfig.cpp
   main.cpp
 )
