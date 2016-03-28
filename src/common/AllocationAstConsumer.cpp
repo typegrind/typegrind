@@ -1,16 +1,3 @@
-//===- PrintFunctionNames.cpp ---------------------------------------------===//
-//
-//                     The LLVM Compiler Infrastructure
-//
-// This file is distributed under the University of Illinois Open Source
-// License. See LICENSE.TXT for details.
-//
-//===----------------------------------------------------------------------===//
-//
-// Example clang plugin which simply prints the names of all the top-level decls
-// in the input file.
-//
-//===----------------------------------------------------------------------===//
 
 #include "AllocationAstConsumer.h"
 
@@ -21,13 +8,13 @@ using namespace clang;
 
 namespace typegrind{
 
-    AllocationASTConsumer::AllocationASTConsumer(clang::Rewriter*& rewriter, MethodMatcher const& matchers)
+    AllocationASTConsumer::AllocationASTConsumer(clang::Rewriter*& rewriter, AppConfig const& appConfig)
             : mRewriter(rewriter)
-            , mMatchers(matchers)
+            , mAppConfig(appConfig)
             , mNewExprHandler(mRewriter)
             , mOpNewExprHandler(mRewriter)
             , mDeleteExprHandler(mRewriter)
-            , mMethodDeclHandler(mRewriter, mMatchers)
+            , mMethodDeclHandler(mRewriter, appConfig.getMethodMatcher())
 
     {
         using namespace ast_matchers;
@@ -50,6 +37,14 @@ namespace typegrind{
             mRewriter = new clang::Rewriter(context.getSourceManager(), context.getLangOpts());
         }
         mMatcher.matchAST(context);
+
+        if(mAppConfig.shouldPrependInclude())
+        {
+          auto mainFile = context.getSourceManager().getMainFileID();
+          auto mainStartLocation = context.getSourceManager().getLocForStartOfFile(mainFile);
+          std::string includeStmt = "#include <" + mAppConfig.getPrependInclude() + ">\n";
+          mRewriter->InsertText(mainStartLocation, includeStmt);
+        }
 
         processRewriterData(mRewriter);
     }

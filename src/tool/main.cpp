@@ -24,14 +24,14 @@ TODO
 class MyAction : public typegrind::AllocationDecoratorAction
 {
 public:
-  MyAction(typegrind::DirectoryMapper mapper, typegrind::MethodMatcher const& matchers) : typegrind::AllocationDecoratorAction(matchers), mapper(mapper)
+  MyAction(typegrind::DirectoryMapper mapper, AppConfig const& appConfig) : typegrind::AllocationDecoratorAction(appConfig), mapper(mapper)
   {
   }
 
   protected:
      std::unique_ptr<clang::ASTConsumer> internalCreateConsumer(clang::Rewriter*& rewriter) override
      {
-       return make_unique<typegrind::CopierAstConsumer>(rewriter, mapper, mMatchers);
+       return make_unique<typegrind::CopierAstConsumer>(rewriter, mapper, mAppConfig);
      }
   private:
     typegrind::DirectoryMapper mapper;
@@ -51,7 +51,7 @@ int main(int argc, const char **argv) {
     ClangTool Tool(OptionsParser.getCompilations(),
                    OptionsParser.getSourcePathList());
 
-    MyAction action(appConfig.getDirectoryMapping(), appConfig.getMethodMatcher());
+    MyAction action(appConfig.getDirectoryMapping(), appConfig);
     auto factory = newFrontendActionFactory(&action);
     Tool.run(factory.get());
 }

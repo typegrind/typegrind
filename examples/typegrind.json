@@ -1,4 +1,5 @@
 {
+  "prepend_include": "typegrind/logger/demo_cout.h",
 	"mapping": {
 		"/usr/include": "out-system/",
 		".": "out/"

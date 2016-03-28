@@ -10,7 +10,7 @@
 #include <clang/Frontend/CompilerInstance.h>
 
 #include "common/AllocationAstConsumer.h"
-#include "MethodMatcher.h"
+#include "AppConfig.h"
 
 namespace typegrind {
 
@@ -18,7 +18,7 @@ namespace typegrind {
     public:
         AllocationDecoratorAction & operator=(AllocationDecoratorAction const &) = delete;
 
-        AllocationDecoratorAction(MethodMatcher const& matchers);
+        AllocationDecoratorAction(AppConfig const& appConfig);
         ~AllocationDecoratorAction();
 
         std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance &CI, llvm::StringRef InFile) override; // plugin
@@ -35,7 +35,7 @@ namespace typegrind {
 
         clang::Rewriter* mRewriter;
       protected:
-        MethodMatcher const& mMatchers;
+        AppConfig const& mAppConfig;
     };
 
 }

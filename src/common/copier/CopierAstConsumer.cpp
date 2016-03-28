@@ -11,7 +11,7 @@ using namespace clang;
 
 namespace typegrind
 {
-  CopierAstConsumer::CopierAstConsumer(clang::Rewriter*& rewriter, DirectoryMapper mapper, MethodMatcher const& matchers) : AllocationASTConsumer(rewriter, matchers), mapper(mapper)
+  CopierAstConsumer::CopierAstConsumer(clang::Rewriter*& rewriter, DirectoryMapper mapper, AppConfig const& appConfig) : AllocationASTConsumer(rewriter, appConfig), mapper(mapper)
   {
   }
 
