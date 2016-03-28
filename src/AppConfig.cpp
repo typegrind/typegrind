@@ -3,12 +3,17 @@
 
 #include <fstream>
 #include <picojson.h>
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
 
 AppConfig::AppConfig(std::string filename)
 : errorMessage("")
 {
   // try to load config
   std::ifstream configFile(filename);
+
+  boost::filesystem::path config_directory(filename);
+  config_directory = boost::filesystem::absolute(filename).remove_filename();
 
   if(!configFile)
   {
@@ -47,7 +52,15 @@ AppConfig::AppConfig(std::string filename)
 
     for (auto const& pair : mappingConfig)
     {
-      mapping.add(pair.first, pair.second.to_str()); // TODO: type check the second!
+      boost::system::error_code src_error;
+      std::string source_path = boost::filesystem::canonical(boost::filesystem::path(pair.first), config_directory, src_error).string();
+      if (src_error)
+      {
+        errorMessage = "couldn't canonize " + pair.first;
+      }
+      // TODO: type check, we should allow multiple variations!
+      std::string destination_path = boost::filesystem::absolute(boost::filesystem::path(pair.second.to_str()), config_directory).string();
+      mapping.add(source_path, destination_path);
     }
   } catch(std::out_of_range oor)
   {
