@@ -18,6 +18,20 @@ public:
 
 };
 
+template<>
+class ClName<char> {
+public:
+  char* cc;
+
+  ClName()
+  : cc(new char[1337]){}
+
+  ~ClName()
+  {
+    delete[] cc;
+  }
+};
+
 int main(void) {
   int* pT = new int(53);
   delete pT;
@@ -26,6 +40,8 @@ int main(void) {
 
   ClName<short> cl1;
   { ClName<int> cl2; }
+
+  ClName<char> cl_spec;
 
   ::operator delete[](pT);
 
