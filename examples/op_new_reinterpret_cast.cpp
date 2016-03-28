@@ -11,6 +11,7 @@ Important ast snippet:
 */
 int main(void) {
     int* pT = reinterpret_cast<int*>(::operator new(100));
+    ::operator delete(pT);
     // expected:
     // int* pT = TYPEGRIND_LOG_ALLOC("int*", "op_new.cpp:13:15", reinterpret_cast<int*>(::operator new(100)), 100);
     return 0;
