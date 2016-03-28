@@ -1,7 +1,7 @@
 {
 	"mapping": {
-		"/usr/include": "/home/dutow/out/system/",
-		"/home/dutow/typegrind/examples": "/home/dutow/out/examples/"
+		"/usr/include": "out-system/",
+		".": "out/"
 	},
 	"watch": [
 		"ClName.*",
