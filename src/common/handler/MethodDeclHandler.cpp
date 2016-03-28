@@ -32,13 +32,14 @@ namespace typegrind
           prettyNameStream.flush();
         }
 
-        if(!mMatchers.matches(prettyName)) return;
+        auto match = mMatchers.matches(prettyName);
+        if(!match) return;
 
         //if(mVisited.find(prettyName) != mVisited.end()) return;
         //mVisited.insert(prettyName);
 
         clang::Stmt *funcBody = decl->getBody();
-        mRewriter->InsertTextAfterToken(funcBody->getSourceRange().getBegin(), " TYPEGRIND_METHOD_ENTER(\""+prettyName+"\") ");
+        mRewriter->InsertTextAfterToken(funcBody->getSourceRange().getBegin(), " TYPEGRIND_METHOD_ENTER(\""+prettyName+"\", \""+match->custom_name+"\", "+std::to_string(match->flags)+") ");
 
         // if constructor - initializer lists
         {
@@ -48,7 +49,7 @@ namespace typegrind
             for(auto initer: constrDecl->inits())
             {
               if(!initer->isMemberInitializer()) continue;
-              mRewriter->InsertTextAfterToken(initer->getLParenLoc(), "TYPEGRIND_METHOD_INITIALIZER(\""+prettyName+"\", (");
+              mRewriter->InsertTextAfterToken(initer->getLParenLoc(), "TYPEGRIND_METHOD_INITIALIZER(\""+prettyName+"\", \""+match->custom_name+"\", "+std::to_string(match->flags)+", (");
               mRewriter->InsertTextBefore(initer->getRParenLoc(), "))");
             }
           }
