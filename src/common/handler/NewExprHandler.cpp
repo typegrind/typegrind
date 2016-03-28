@@ -99,31 +99,31 @@ namespace typegrind {
             macroStart += std::to_string(ploc.getLine());
             macroStart += "\", ";
 
-            // 3rd parameter: the new call. It's the expression itself
 
-            clang::SourceLocation startLoc = getLocationAtExpansionStart(newExpr->getStartLoc(), sm);
-            mRewriter->InsertText(startLoc, macroStart);
-
-            // 4th parameter: sizeof type
-            std::string macroEnd;
-            macroEnd += ", ";
-            macroEnd += "sizeof(";
-            macroEnd += allocatedType.getAsString();
-            macroEnd += ")";
+            // 3th parameter: sizeof type
+            macroStart += ", ";
+            macroStart += "sizeof(";
+            macroStart += allocatedType.getAsString();
+            macroStart += ")";
 
 
             // if this is as array, there is an 5th parameter, the array size
             if (newExpr->isArray()) {
-                macroEnd += ", ";
-                llvm::raw_string_ostream os(macroEnd);
+                macroStart += ", ";
+                llvm::raw_string_ostream os(macroStart);
                 // TODO: this assumes that the size expression is const, which isn't always true! => extract expression to a variable
                 newExpr->getArraySize()->printPretty(os, nullptr, clang::PrintingPolicy(result.Context->getPrintingPolicy()));
                 os.flush();
             }
 
+            // 4th or 5th parameter: the new call. It's the expression itself
 
             // end added function call
+            std::string macroEnd;
             macroEnd += ")";
+
+            clang::SourceLocation startLoc = getLocationAtExpansionStart(newExpr->getStartLoc(), sm);
+            mRewriter->InsertText(startLoc, macroStart);
 
             clang::SourceLocation endLoc = getLocationAtExpansionEnd(newExpr->getEndLoc(), sm);
             mRewriter->InsertTextAfterToken(endLoc, macroEnd);
