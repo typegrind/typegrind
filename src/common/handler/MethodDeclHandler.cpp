@@ -40,11 +40,11 @@ namespace typegrind
 
         auto& sm = result.Context->getSourceManager();
         auto ploc = sm.getPresumedLoc(decl->getLocEnd());
-        std::string locStr = "'";
+        std::string locStr = "\"";
         locStr += ploc.getFilename();
         locStr += ":";
         locStr += std::to_string(ploc.getLine());
-        locStr += "'";
+        locStr += "\"";
 
         clang::Stmt *funcBody = decl->getBody();
         mRewriter->InsertTextAfterToken(funcBody->getSourceRange().getBegin(), " TYPEGRIND_LOG_METHOD_ENTER(\""+prettyName+"\", "+locStr+", \""+match->custom_name+"\", "+std::to_string(match->flags)+") ");
