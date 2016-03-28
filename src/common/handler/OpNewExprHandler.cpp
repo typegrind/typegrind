@@ -69,28 +69,29 @@ namespace typegrind {
         macroStart += std::to_string(ploc.getLine());
         macroStart += "\", ";
 
-        // 3rd parameter: the new call. It's the expression itself
+
+
+        // 4th parameter: sizeof type
+        macroStart += "sizeof(";
+        macroStart += allocatedType.getAsString();
+        macroStart += ")";
+        macroStart += ", ";
+
+
+        // 4th argument: size, which is the first argument to the call
+        // TODO: extract it to a variable!
+        llvm::raw_string_ostream os(macroStart);
+        newExpr->getArg(0)->printPretty(os, nullptr, clang::PrintingPolicy(result.Context->getPrintingPolicy()));
+        os.flush();
+        macroStart += ", ";
+
+        // 4/5th parameter: the new call. It's the expression itself
+
+        // end added function call
+        std::string macroEnd = ")";
 
         clang::SourceLocation startLoc = newExpr->getLocStart();
         mRewriter->InsertText(startLoc, macroStart);
-
-        // 4th parameter: sizeof type
-        std::string macroEnd;
-        macroEnd += ", ";
-        macroEnd += "sizeof(";
-        macroEnd += allocatedType.getAsString();
-        macroEnd += ")";
-
-
-        // 5th argument: size, which is the first argument to the call
-        // TODO: extract it to a variable!
-        macroEnd += ", ";
-        llvm::raw_string_ostream os(macroEnd);
-        newExpr->getArg(0)->printPretty(os, nullptr, clang::PrintingPolicy(result.Context->getPrintingPolicy()));
-        os.flush();
-
-        // end added function call
-        macroEnd += ")";
 
         clang::SourceLocation endLoc = newExpr->getLocEnd();
         mRewriter->InsertTextAfterToken(endLoc, macroEnd);
