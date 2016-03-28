@@ -1,5 +1,5 @@
 {
-  "prepend_include": "typegrind/logger/demo_cout.h",
+  "prepend_include": [ "typegrind/logger/demo_cout.h", "typeinfo", "cxxabi.h" ],
 	"mapping": {
 		"/usr/include": "out-system/",
 		".": "out/"

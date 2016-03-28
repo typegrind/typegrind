@@ -56,7 +56,11 @@ namespace typegrind{
         {
           auto mainFile = context.getSourceManager().getMainFileID();
           auto mainStartLocation = context.getSourceManager().getLocForStartOfFile(mainFile);
-          std::string includeStmt = "#include <" + mAppConfig.getPrependInclude() + ">\n";
+          std::string includeStmt;
+          for(std::string const& inc: mAppConfig.getPrependInclude())
+          {
+            includeStmt += "#include <" + inc + ">\n";
+          }
           mRewriter->InsertText(mainStartLocation, includeStmt);
         }
 
