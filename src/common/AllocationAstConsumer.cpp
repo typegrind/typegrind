@@ -22,7 +22,7 @@ namespace typegrind{
         mMatcher.addMatcher(cxxNewExpr().bind("newStmt"), &mNewExprHandler);
         mMatcher.addMatcher(cxxMethodDecl().bind("decl"), &mMethodDeclHandler);
         mMatcher.addMatcher(
-                callExpr(callee(functionDecl(hasName("operator new"))), hasAncestor(cxxStaticCastExpr().bind("castExpr"))).bind("newStmt") ,
+                callExpr(callee(functionDecl(hasName("operator new")).bind("fun")), hasAncestor(cxxStaticCastExpr().bind("castExpr"))).bind("newStmt") ,
                 &mOpNewExprHandler
         );
         mMatcher.addMatcher(
