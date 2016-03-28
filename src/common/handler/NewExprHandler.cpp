@@ -101,19 +101,19 @@ namespace typegrind {
 
 
             // 3th parameter: sizeof type
-            macroStart += ", ";
             macroStart += "sizeof(";
             macroStart += allocatedType.getAsString();
             macroStart += ")";
+            macroStart += ", ";
 
 
             // if this is as array, there is an 5th parameter, the array size
             if (newExpr->isArray()) {
-                macroStart += ", ";
                 llvm::raw_string_ostream os(macroStart);
                 // TODO: this assumes that the size expression is const, which isn't always true! => extract expression to a variable
                 newExpr->getArraySize()->printPretty(os, nullptr, clang::PrintingPolicy(result.Context->getPrintingPolicy()));
                 os.flush();
+                macroStart += ", ";
             }
 
             // 4th or 5th parameter: the new call. It's the expression itself
