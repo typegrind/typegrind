@@ -2,7 +2,10 @@
 #include "AppConfig.h"
 
 #include <fstream>
+
+#define PICOJSON_USE_INT64
 #include <picojson.h>
+
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 
@@ -80,7 +83,46 @@ AppConfig::AppConfig(std::string filename)
 
     for (auto const& r : watchConfig)
     {
-      methodMatches.add({ r.to_str(), "", 0 }); // TODO: type check
+      std::string regex;
+      std::string custom_name;
+      uint64_t flags = 0;
+      if(r.is<std::string>())
+      {
+        regex = r.to_str();
+      }
+      else if(r.is<picojson::object>())
+      {
+        const picojson::value::object& actualWatch = r.get<picojson::object>();
+
+        auto regex_it = actualWatch.find("regex");
+        if(regex_it != actualWatch.end())
+        {
+          regex = regex_it->second.to_str();
+        }
+        else
+        {
+          errorMessage = "object in watch without regex property!";
+          return;
+        }
+
+        auto name_it = actualWatch.find("name");
+        if(name_it != actualWatch.end())
+        {
+          custom_name = name_it->second.to_str(); 
+        }
+
+        auto flags_it = actualWatch.find("flags");
+        if (flags_it != actualWatch.end() && flags_it->second.is<int64_t>())
+        {
+          flags = flags_it->second.get<int64_t>();  // TODO: named flag support
+        }
+      }
+      else
+      {
+        errorMessage = "invalid record in watch!";
+        return;
+      }
+      methodMatches.add({ regex, custom_name, flags });
     }
   }
   catch(std::out_of_range oor)
