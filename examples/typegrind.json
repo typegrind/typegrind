@@ -4,7 +4,11 @@
 		".": "out/"
 	},
 	"watch": [
-		"ClName.*",
+		{
+      "regex": "ClName.*",
+      "name": "something",
+      "flags": 5
+    },
 		"std::vector.*"
 	]
 }
