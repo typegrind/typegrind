@@ -48,7 +48,18 @@ AppConfig::AppConfig(std::string filename)
     auto prepend_it = mainConfig.find("prepend_include");
     if(prepend_it != mainConfig.end())
     {
-      prepend_include = prepend_it->second.to_str();
+      if(prepend_it->second.is<std::string>())
+      {
+        prepend_include.push_back(prepend_it->second.to_str());
+      }
+      else if (prepend_it->second.is<picojson::array>())
+      {
+        const picojson::value::array& prepends = prepend_it->second.get<picojson::array>();
+        for (auto const& prep : prepends)
+        {
+          prepend_include.push_back(prep.to_str());
+        }
+      }
     }
 
     auto const& mappingC = mainConfig.at("mapping");
@@ -162,7 +173,7 @@ bool AppConfig::shouldPrependInclude() const
   return !prepend_include.empty();
 }
 
-std::string AppConfig::getPrependInclude() const
+std::vector<std::string> AppConfig::getPrependInclude() const
 {
   return prepend_include;
 }

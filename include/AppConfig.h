@@ -4,6 +4,9 @@
 #include "DirectoryMapper.h"
 #include "MethodMatcher.h"
 
+#include <string>
+#include <vector>
+
 class AppConfig
 {
 public:
@@ -14,9 +17,9 @@ public:
   bool isValid() const;
   std::string getErrorMessage() const;
   bool shouldPrependInclude() const;
-  std::string getPrependInclude() const;
+  std::vector<std::string> getPrependInclude() const;
 private:
-  std::string prepend_include;
+  std::vector<std::string> prepend_include;
   typegrind::DirectoryMapper mapping;
   typegrind::MethodMatcher methodMatches;
   std::string errorMessage;
