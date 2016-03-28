@@ -15,7 +15,7 @@ namespace typegrind {
             return;
         }
 
-        std::string macroStart = "TYPEGRIND_LOG_DEALLOC";
+        std::string macroStart = "TYPEGRIND_LOG_NEW";
 
         if (deleteExpr->isArrayForm()) {
             macroStart += "_ARRAY";

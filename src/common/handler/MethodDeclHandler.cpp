@@ -38,8 +38,16 @@ namespace typegrind
         //if(mVisited.find(prettyName) != mVisited.end()) return;
         //mVisited.insert(prettyName);
 
+        auto& sm = result.Context->getSourceManager();
+        auto ploc = sm.getPresumedLoc(decl->getLocEnd());
+        std::string locStr = "'";
+        locStr += ploc.getFilename();
+        locStr += ":";
+        locStr += std::to_string(ploc.getLine());
+        locStr += "'";
+
         clang::Stmt *funcBody = decl->getBody();
-        mRewriter->InsertTextAfterToken(funcBody->getSourceRange().getBegin(), " TYPEGRIND_METHOD_ENTER(\""+prettyName+"\", \""+match->custom_name+"\", "+std::to_string(match->flags)+") ");
+        mRewriter->InsertTextAfterToken(funcBody->getSourceRange().getBegin(), " TYPEGRIND_LOG_METHOD_ENTER(\""+prettyName+"\", "+locStr+", \""+match->custom_name+"\", "+std::to_string(match->flags)+") ");
 
         // if constructor - initializer lists
         {
@@ -49,7 +57,7 @@ namespace typegrind
             for(auto initer: constrDecl->inits())
             {
               if(!initer->isMemberInitializer()) continue;
-              mRewriter->InsertTextAfterToken(initer->getLParenLoc(), "TYPEGRIND_METHOD_INITIALIZER(\""+prettyName+"\", \""+match->custom_name+"\", "+std::to_string(match->flags)+", (");
+              mRewriter->InsertTextAfterToken(initer->getLParenLoc(), "TYPEGRIND_LOG_METHOD_INITIALIZER(\""+prettyName+"\", "+locStr+", \""+match->custom_name+"\", "+std::to_string(match->flags)+", (");
               mRewriter->InsertTextBefore(initer->getRParenLoc(), "))");
             }
           }

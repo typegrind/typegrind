@@ -13,6 +13,7 @@ namespace typegrind{
             , mAppConfig(appConfig)
             , mNewExprHandler(mRewriter)
             , mOpNewExprHandler(mRewriter)
+            , mOpDeleteExprHandler(mRewriter)
             , mDeleteExprHandler(mRewriter)
             , mMethodDeclHandler(mRewriter, appConfig.getMethodMatcher())
 
@@ -25,10 +26,23 @@ namespace typegrind{
                 &mOpNewExprHandler
         );
         mMatcher.addMatcher(
-                callExpr(callee(functionDecl(hasName("operator new"))), hasAncestor(cxxReinterpretCastExpr().bind("castExpr"))).bind("newStmt"),
+                callExpr(callee(functionDecl(hasName("operator new")).bind("fun")), hasAncestor(cxxReinterpretCastExpr().bind("castExpr"))).bind("newStmt"),
                 &mOpNewExprHandler
         );
+        mMatcher.addMatcher(
+                callExpr(callee(functionDecl(hasName("operator new[]")).bind("fun")), hasAncestor(cxxReinterpretCastExpr().bind("castExpr"))).bind("newStmt"),
+                &mOpNewExprHandler
+        );
+
         mMatcher.addMatcher(cxxDeleteExpr().bind("deleteStmt"), &mDeleteExprHandler);
+        mMatcher.addMatcher(
+                callExpr(callee(functionDecl(hasName("operator delete")).bind("fun"))).bind("deleteStmt"),
+                &mOpDeleteExprHandler
+        );
+        mMatcher.addMatcher(
+                callExpr(callee(functionDecl(hasName("operator delete[]")).bind("fun"))).bind("deleteStmt"),
+                &mOpDeleteExprHandler
+        );
     }
 
     void AllocationASTConsumer::HandleTranslationUnit(ASTContext& context)

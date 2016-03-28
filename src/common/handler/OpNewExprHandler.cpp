@@ -14,6 +14,7 @@ namespace typegrind {
     {
         const clang::ExplicitCastExpr* castExpr = result.Nodes.getNodeAs<clang::ExplicitCastExpr>("castExpr");
         const clang::CallExpr* newExpr = result.Nodes.getNodeAs<clang::CallExpr>("newStmt");
+        const clang::FunctionDecl* funDecl = result.Nodes.getNodeAs<clang::FunctionDecl>("fun");
         if (nullptr == castExpr)
         {
             llvm::errs() << "Couldn't convert MatcherResult to ExplicitCastExpr!\n";
@@ -37,6 +38,10 @@ namespace typegrind {
         }
 
         std::string macroStart = "TYPEGRIND_LOG_OP_NEW";
+        if (funDecl->getNameInfo().getName().getAsString()=="operator new[]") {
+          macroStart += "_ARRAY";
+        }
+
         macroStart += "(";
 
         // 1st paramter: name of the type.

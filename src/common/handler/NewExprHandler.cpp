@@ -68,7 +68,7 @@ namespace typegrind {
                 return;
             }
 
-            std::string macroStart = "TYPEGRIND_LOG_ALLOC";
+            std::string macroStart = "TYPEGRIND_LOG_NEW";
             if (newExpr->isArray()) {
                 macroStart += "_ARRAY";
             }
