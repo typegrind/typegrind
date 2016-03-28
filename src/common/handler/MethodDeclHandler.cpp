@@ -35,19 +35,23 @@ namespace typegrind
         auto match = mMatchers.matches(prettyName);
         if(!match) return;
 
-        //if(mVisited.find(prettyName) != mVisited.end()) return;
-        //mVisited.insert(prettyName);
-
         auto& sm = result.Context->getSourceManager();
-        auto ploc = sm.getPresumedLoc(decl->getLocEnd());
+
+        clang::Stmt *funcBody = decl->getBody();
+        auto insertPosition = funcBody->getSourceRange().getBegin();
+        auto ploc = sm.getPresumedLoc(insertPosition);
+
+        // only instrument a source location once
+        if(mAlreadyEncoded.find(insertPosition.getRawEncoding()) != mAlreadyEncoded.end()) return;
+        mAlreadyEncoded.insert(insertPosition.getRawEncoding());
+
         std::string locStr = "\"";
         locStr += ploc.getFilename();
         locStr += ":";
         locStr += std::to_string(ploc.getLine());
         locStr += "\"";
 
-        clang::Stmt *funcBody = decl->getBody();
-        mRewriter->InsertTextAfterToken(funcBody->getSourceRange().getBegin(), " TYPEGRIND_LOG_METHOD_ENTER(\""+prettyName+"\", "+locStr+", \""+match->custom_name+"\", "+std::to_string(match->flags)+") ");
+        mRewriter->InsertTextAfterToken(insertPosition, " TYPEGRIND_LOG_METHOD_ENTER(\""+prettyName+"\", "+locStr+", \""+match->custom_name+"\", "+std::to_string(match->flags)+") ");
 
         // if constructor - initializer lists
         {

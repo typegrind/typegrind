@@ -5,6 +5,7 @@
 #include <clang/Rewrite/Core/Rewriter.h>
 
 #include "MethodMatcher.h"
+#include <unordered_set>
 
 namespace typegrind {
     class MethodDeclHandler : public clang::ast_matchers::MatchFinder::MatchCallback {
@@ -17,7 +18,7 @@ namespace typegrind {
 
     private:
         clang::Rewriter*& mRewriter;
-        std::set<std::string> mVisited;
+        std::unordered_set<unsigned> mAlreadyEncoded;
         MethodMatcher const& mMatchers;
     };
 }
