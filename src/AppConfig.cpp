@@ -45,6 +45,12 @@ AppConfig::AppConfig(std::string filename)
 
   try
   {
+    auto prepend_it = mainConfig.find("prepend_include");
+    if(prepend_it != mainConfig.end())
+    {
+      prepend_include = prepend_it->second.to_str();
+    }
+
     auto const& mappingC = mainConfig.at("mapping");
     if (!mappingC.is<picojson::object>())
     {
@@ -150,3 +156,14 @@ typegrind::MethodMatcher const& AppConfig::getMethodMatcher() const
 {
   return methodMatches;
 }
+
+bool AppConfig::shouldPrependInclude() const
+{
+  return !prepend_include.empty();
+}
+
+std::string AppConfig::getPrependInclude() const
+{
+  return prepend_include;
+}
+
