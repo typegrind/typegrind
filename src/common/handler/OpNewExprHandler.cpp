@@ -63,7 +63,7 @@ namespace typegrind {
             // We could generate a (manual) specialization for this function, but for now, this is enough
             // Let's just use type_info::name(), and demangle it somehow runtime...
             // or maybe create an initialization code dumping the mangled names for all affected specializations? (the ones skipped by the previous return)
-            macroStart += "typeid(" + allocatedType.getAsString() + ").name()";
+            macroStart += "TYPEGRIND_DEMANGLE(typeid(" + allocatedType.getAsString() + ").name())";
         } else {
             macroStart += "\"" + allocatedType.getAsString() + "\""; // + (int)allocatedType.getTypePtr()->getAsTagDecl();
         }
