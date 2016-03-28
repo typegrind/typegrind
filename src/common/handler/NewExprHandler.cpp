@@ -54,6 +54,7 @@ namespace typegrind {
             llvm::errs() << "Couldn't convert MatcherResult to CXXNewExpr!\n";
             return;
         }
+
         if (!isPlacementNew(newExpr))
         {
             // Skipping substituted template types
@@ -67,6 +68,13 @@ namespace typegrind {
                 // * why isn't a specialized template a substitution? (or maybe it's in the standard?)
                 return;
             }
+
+            auto& sm = result.Context->getSourceManager();
+
+            clang::SourceLocation startLoc = getLocationAtExpansionStart(newExpr->getStartLoc(), sm);
+            // only instrument a source location once
+            if(mAlreadyEncoded.find(startLoc.getRawEncoding()) != mAlreadyEncoded.end()) return;
+            mAlreadyEncoded.insert(startLoc.getRawEncoding());
 
             std::string macroStart = "TYPEGRIND_LOG_NEW";
             if (newExpr->isArray()) {
@@ -91,7 +99,6 @@ namespace typegrind {
             macroStart += ", ";
 
             // 2nd parameter: source location. At least this is easy
-            auto& sm = result.Context->getSourceManager();
             auto ploc = sm.getPresumedLoc(newExpr->getLocEnd());
             macroStart += "\"";
             macroStart += ploc.getFilename();
@@ -122,7 +129,6 @@ namespace typegrind {
             std::string macroEnd;
             macroEnd += ")";
 
-            clang::SourceLocation startLoc = getLocationAtExpansionStart(newExpr->getStartLoc(), sm);
             mRewriter->InsertText(startLoc, macroStart);
 
             clang::SourceLocation endLoc = getLocationAtExpansionEnd(newExpr->getEndLoc(), sm);

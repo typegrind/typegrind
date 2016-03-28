@@ -25,6 +25,15 @@ namespace typegrind {
             llvm::errs() << "Couldn't convert MatcherResult to CallExpr!\n";
             return;
         }
+
+        auto& sm = result.Context->getSourceManager();
+
+        clang::SourceLocation startLoc = newExpr->getLocStart();
+        // only instrument a source location once
+        if(mAlreadyEncoded.find(startLoc.getRawEncoding()) != mAlreadyEncoded.end()) return;
+        mAlreadyEncoded.insert(startLoc.getRawEncoding());
+
+
         // Skipping substituted template types
         auto srcType = castExpr->getTypeInfoAsWritten()->getTypeLoc();
         auto ptr = srcType.getType().getTypePtr()->getAs<clang::SubstTemplateTypeParmType>();
@@ -61,7 +70,6 @@ namespace typegrind {
         macroStart += ", ";
 
         // 2nd parameter: source location. At least this is easy
-        auto& sm = result.Context->getSourceManager();
         auto ploc = sm.getPresumedLoc(newExpr->getLocEnd());
         macroStart += "\"";
         macroStart += ploc.getFilename();
@@ -90,7 +98,6 @@ namespace typegrind {
         // end added function call
         std::string macroEnd = ")";
 
-        clang::SourceLocation startLoc = newExpr->getLocStart();
         mRewriter->InsertText(startLoc, macroStart);
 
         clang::SourceLocation endLoc = newExpr->getLocEnd();

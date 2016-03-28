@@ -15,6 +15,13 @@ namespace typegrind {
             return;
         }
 
+        auto& sm = result.Context->getSourceManager();
+
+        clang::SourceLocation startLoc = deleteExpr->getLocStart();
+        // only instrument a source location once
+        if(mAlreadyEncoded.find(startLoc.getRawEncoding()) != mAlreadyEncoded.end()) return;
+        mAlreadyEncoded.insert(startLoc.getRawEncoding());
+
         std::string macroStart = "TYPEGRIND_LOG_DELETE";
 
         if (deleteExpr->isArrayForm()) {
@@ -32,7 +39,6 @@ namespace typegrind {
         macroStart += ", ";
 
         // 2nd parameter: source location
-        auto& sm = result.Context->getSourceManager();
         auto ploc = sm.getPresumedLoc(deleteExpr->getLocEnd());
         macroStart += "\"";
         macroStart += ploc.getFilename();
@@ -40,7 +46,6 @@ namespace typegrind {
         macroStart += std::to_string(ploc.getLine());
         macroStart += "\", ";
 
-        clang::SourceLocation startLoc = deleteExpr->getLocStart();
         mRewriter->InsertText(startLoc, macroStart);
 
         // 3rd parameter: the expression itself

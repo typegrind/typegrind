@@ -20,6 +20,14 @@ namespace typegrind {
             return;
         }
 
+        auto& sm = result.Context->getSourceManager();
+
+        clang::SourceLocation startLoc = deleteExpr->getLocStart();
+        // only instrument a source location once
+        if(mAlreadyEncoded.find(startLoc.getRawEncoding()) != mAlreadyEncoded.end()) return;
+        mAlreadyEncoded.insert(startLoc.getRawEncoding());
+
+
         std::string macroStart = "TYPEGRIND_LOG_OP_DELETE";
         if (funDecl->getNameInfo().getName().getAsString()=="operator delete[]") {
           macroStart += "_ARRAY";
@@ -35,7 +43,6 @@ namespace typegrind {
         macroStart += ", ";
 
         // 2nd parameter: source location. At least this is easy
-        auto& sm = result.Context->getSourceManager();
         auto ploc = sm.getPresumedLoc(deleteExpr->getLocEnd());
         macroStart += "\"";
         macroStart += ploc.getFilename();
@@ -45,7 +52,6 @@ namespace typegrind {
 
         // 3rd parameter: the delete call. It's the expression itself
 
-        clang::SourceLocation startLoc = deleteExpr->getLocStart();
         mRewriter->InsertText(startLoc, macroStart);
 
         // end added macro

@@ -7,6 +7,7 @@
 
 #include <clang/ASTMatchers/ASTMatchFinder.h>
 #include <clang/Rewrite/Core/Rewriter.h>
+#include <unordered_set>
 
 namespace typegrind {
     class NewExprHandler : public clang::ast_matchers::MatchFinder::MatchCallback {
@@ -19,6 +20,7 @@ namespace typegrind {
 
     private:
         clang::Rewriter*& mRewriter;
+        std::unordered_set<unsigned> mAlreadyEncoded;
     };
 }
 
