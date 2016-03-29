@@ -17,3 +17,6 @@ SET ( LLVM_MAIN_SRC_DIR vendor/llvm )
 
 ADD_SUBDIRECTORY ( typegrind/core )
 ADD_SUBDIRECTORY ( vendor/llvm )
+
+ADD_SUBDIRECTORY ( logger/nop )
+ADD_SUBDIRECTORY ( logger/demo_cout )
