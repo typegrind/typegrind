@@ -3,3 +3,6 @@ set(LLVM_USED_LIBS clangBasic clangTooling clangDriver clangFrontend clangAST cl
 
 INCLUDE_DIRECTORIES(src)
 ADD_SUBDIRECTORY(src)
+ADD_SUBDIRECTORY(test)
+
+

@@ -1,0 +1,8 @@
+{
+   "mapping": {
+     "@CLANG_TYPEGRIND_TEST_SRC_DIR@": "@CLANG_TYPEGRIND_TEST_BIN_DIR@/Output/Inputs",
+     "/usr/include": "@CLANG_TYPEGRIND_TEST_BIN_DIR@/Output/Inputs/usr-include"
+   },
+   "watches": {
+   }
+}
