@@ -17,7 +17,6 @@ target_link_libraries(clang-typegrind
   clangAST
   clangASTMatchers
   clangRewrite
-  ${Boost_LIBRARIES}
   typegrind-core
   )
 

@@ -3,11 +3,8 @@
 
 using namespace clang;
 
-#include <boost/algorithm/string/replace.hpp>
-#include <boost/algorithm/string/predicate.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/filesystem.hpp>
 #include <fstream>
+#include "FileUtils.h"
 
 namespace typegrind
 {
@@ -22,24 +19,20 @@ namespace typegrind
       const FileEntry *Entry = rewriter->getSourceMgr().getFileEntryForID(it->first);
       if(Entry && Entry->isValid())
       {
-        boost::system::error_code fs_error;
         std::string originalFileName(Entry->getName());
 
-        boost::filesystem::path canonicalPath = boost::filesystem::canonical(Entry->getName(), fs_error);
-        if(fs_error)  
+        std::string outputFileName;
+        if(!typegrind::file_utils::canonize_path(originalFileName, outputFileName))  
         {
           llvm::errs() << "Error while processing entry: " << Entry->getName() << "\n";
           return;
         }
 
-        std::string outputFileName = canonicalPath.string();
         if (mapper.apply(outputFileName))
         {
             llvm::outs() << "Writing " << outputFileName << "\n";
-            boost::filesystem::path targetPath(outputFileName);
-
-            boost::filesystem::create_directories(targetPath.parent_path(), fs_error);
-            if(fs_error)  
+            
+            if(!typegrind::file_utils::ensure_directory_exists(outputFileName))  
             {
               llvm::errs() << "Error while processing entry: " << Entry->getName() << "\n";
               return;
