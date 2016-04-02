@@ -37,7 +37,8 @@ private:
   typegrind::DirectoryMapper mapper;
 };
 
-int main(int argc, const char **argv) {
+int main(int argc, const char **argv)
+{
   CommonOptionsParser OptionsParser(argc, argv, typegrindCategory);
 
   AppConfig appConfig("typegrind.json");

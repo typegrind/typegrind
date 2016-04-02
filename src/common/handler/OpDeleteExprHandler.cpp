@@ -4,7 +4,8 @@
 
 #include "OpDeleteExprHandler.h"
 
-namespace typegrind {
+namespace typegrind
+{
   OpDeleteExprHandler::OpDeleteExprHandler(clang::Rewriter*& rewriter)
           : mRewriter(rewriter)
   {
@@ -29,7 +30,8 @@ namespace typegrind {
 
 
       std::string macroStart = "TYPEGRIND_LOG_OP_DELETE";
-      if (funDecl->getNameInfo().getName().getAsString()=="operator delete[]") {
+      if (funDecl->getNameInfo().getName().getAsString()=="operator delete[]")
+      {
           macroStart += "_ARRAY";
       }
 
@@ -61,7 +63,8 @@ namespace typegrind {
       mRewriter->InsertTextAfterToken(endLoc, macroEnd);
   }
 
-  clang::StringRef OpDeleteExprHandler::getID() const {
+  clang::StringRef OpDeleteExprHandler::getID() const
+  {
       return "typegrind";
   }
 }

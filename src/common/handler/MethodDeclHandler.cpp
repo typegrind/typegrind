@@ -12,7 +12,8 @@ namespace typegrind
   {
   }
 
-  clang::StringRef MethodDeclHandler::getID() const {
+  clang::StringRef MethodDeclHandler::getID() const
+  {
     return "typegrind";
   }
 

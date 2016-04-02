@@ -12,9 +12,11 @@
 #include "common/AllocationAstConsumer.h"
 #include "AppConfig.h"
 
-namespace typegrind {
+namespace typegrind
+{
 
-  class AllocationDecoratorAction : public clang::PluginASTAction {
+  class AllocationDecoratorAction : public clang::PluginASTAction
+  {
   public:
     AllocationDecoratorAction & operator=(AllocationDecoratorAction const &) = delete;
 

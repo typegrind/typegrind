@@ -1,13 +1,16 @@
 
 #include "DeleteExprHandler.h"
 
-namespace typegrind {
+namespace typegrind
+{
 
   DeleteExprHandler::DeleteExprHandler(clang::Rewriter *&rewriter)
-          : mRewriter(rewriter) {
+          : mRewriter(rewriter)
+  {
   }
 
-  void DeleteExprHandler::run(const clang::ast_matchers::MatchFinder::MatchResult &result) {
+  void DeleteExprHandler::run(const clang::ast_matchers::MatchFinder::MatchResult &result)
+  {
     const clang::CXXDeleteExpr* deleteExpr = result.Nodes.getNodeAs<clang::CXXDeleteExpr>("deleteStmt");
     if (nullptr == deleteExpr)
     {
@@ -24,20 +27,23 @@ namespace typegrind {
 
     std::string macroStart = "TYPEGRIND_LOG_DELETE";
 
-    if (deleteExpr->isArrayForm()) {
+    if (deleteExpr->isArrayForm())
+    {
       macroStart += "_ARRAY";
     }
     macroStart += "(";
 
     // 1st parameter: type
     auto deletedType = deleteExpr->getArgument()->getType();
-    if (deletedType.getTypePtr()->isTemplateTypeParmType()) {
+    if (deletedType.getTypePtr()->isTemplateTypeParmType())
+    {
       // TODO: somehow add compiler specific demangle ...
       // We could generate a (manual) specialization for this function, but for now, this is enough
       // Let's just use type_info::name(), and demangle it somehow runtime...
       // or maybe create an initialization code dumping the mangled names for all affected specializations? (the ones skipped by the previous return)
       macroStart += "TYPEGRIND_DEMANGLE(typeid(" + deletedType.getAsString() + ").name()), \"TODO\"";
-    } else {
+    } else
+    {
       macroStart += "\"" + deletedType.getAsString() + "\""; // + (int)deletedType.getTypePtr()->getAsTagDecl();
       macroStart += ", \"" + deletedType.getCanonicalType()->getPointeeType().getAsString() + "\""; // + (int)deletedType.getTypePtr()->getAsTagDecl();
     }
@@ -61,7 +67,8 @@ namespace typegrind {
     mRewriter->InsertTextAfterToken(endLoc, macroEnd);
   }
 
-  clang::StringRef DeleteExprHandler::getID() const {
+  clang::StringRef DeleteExprHandler::getID() const
+  {
     return "typegrind";
   }
 }

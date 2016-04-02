@@ -15,7 +15,8 @@ namespace typegrind
   void CopierAstConsumer::processRewriterData(clang::Rewriter*& rewriter)
   {
     llvm::outs() << "processing!\n";
-    for (auto it = rewriter->buffer_begin(), end = rewriter->buffer_end(); it != end; ++it) {
+    for (auto it = rewriter->buffer_begin(), end = rewriter->buffer_end(); it != end; ++it)
+    {
       const FileEntry *Entry = rewriter->getSourceMgr().getFileEntryForID(it->first);
       if(Entry && Entry->isValid())
       {

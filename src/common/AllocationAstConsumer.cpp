@@ -6,16 +6,17 @@
 
 using namespace clang;
 
-namespace typegrind{
+namespace typegrind
+{
 
   AllocationASTConsumer::AllocationASTConsumer(clang::Rewriter*& rewriter, AppConfig const& appConfig)
-    : mRewriter(rewriter)
-    , mAppConfig(appConfig)
-    , mNewExprHandler(mRewriter)
-    , mOpNewExprHandler(mRewriter)
-    , mOpDeleteExprHandler(mRewriter)
-    , mDeleteExprHandler(mRewriter)
-    , mMethodDeclHandler(mRewriter, appConfig.getMethodMatcher())
+          : mRewriter(rewriter)
+          , mAppConfig(appConfig)
+          , mNewExprHandler(mRewriter)
+          , mOpNewExprHandler(mRewriter)
+          , mOpDeleteExprHandler(mRewriter)
+          , mDeleteExprHandler(mRewriter)
+          , mMethodDeclHandler(mRewriter, appConfig.getMethodMatcher())
 
   {
     using namespace ast_matchers;
@@ -47,7 +48,8 @@ namespace typegrind{
 
   void AllocationASTConsumer::HandleTranslationUnit(ASTContext& context)
   {
-    if (mRewriter == nullptr) {
+    if (mRewriter == nullptr)
+    {
       mRewriter = new clang::Rewriter(context.getSourceManager(), context.getLangOpts());
     }
     mMatcher.matchAST(context);

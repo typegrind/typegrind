@@ -15,8 +15,10 @@
 #include "common/handler/MethodDeclHandler.h"
 #include "AppConfig.h"
 
-namespace typegrind {
-  class AllocationASTConsumer : public clang::ASTConsumer {
+namespace typegrind
+{
+  class AllocationASTConsumer : public clang::ASTConsumer
+  {
   public:
     AllocationASTConsumer(clang::Rewriter*& rewriter, AppConfig const& appConfig);
 

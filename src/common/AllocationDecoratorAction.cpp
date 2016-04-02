@@ -1,7 +1,8 @@
 
 #include "AllocationDecoratorAction.h"
 
-namespace typegrind {
+namespace typegrind
+{
 
   AllocationDecoratorAction::~AllocationDecoratorAction()
   {
@@ -14,7 +15,8 @@ namespace typegrind {
 
   AllocationDecoratorAction::AllocationDecoratorAction(AppConfig const& appConfig) : mRewriter(nullptr), mAppConfig(appConfig) { }
 
-  bool AllocationDecoratorAction::isCpp(clang::CompilerInstance const& Compiler) {
+  bool AllocationDecoratorAction::isCpp(clang::CompilerInstance const& Compiler)
+  {
     clang::LangOptions const Opts = Compiler.getLangOpts();
     return Opts.CPlusPlus;
   }
@@ -25,11 +27,13 @@ namespace typegrind {
   }
 
   // ..:: Entry point for plugins ::..
-  std::unique_ptr<clang::ASTConsumer> AllocationDecoratorAction::newASTConsumer() {
+  std::unique_ptr<clang::ASTConsumer> AllocationDecoratorAction::newASTConsumer()
+  {
     return internalCreateConsumer(mRewriter);
   }
 
-  std::unique_ptr<clang::ASTConsumer> AllocationDecoratorAction::CreateASTConsumer(clang::CompilerInstance &CI, llvm::StringRef InFile) {
+  std::unique_ptr<clang::ASTConsumer> AllocationDecoratorAction::CreateASTConsumer(clang::CompilerInstance &CI, llvm::StringRef InFile)
+  {
     return internalCreateConsumer(mRewriter);
   }
 }

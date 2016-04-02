@@ -9,8 +9,10 @@
 #include <clang/Rewrite/Core/Rewriter.h>
 #include <unordered_set>
 
-namespace typegrind {
-  class OpDeleteExprHandler : public clang::ast_matchers::MatchFinder::MatchCallback {
+namespace typegrind
+{
+  class OpDeleteExprHandler : public clang::ast_matchers::MatchFinder::MatchCallback
+  {
   public:
 
     OpDeleteExprHandler(clang::Rewriter*& rewriter);

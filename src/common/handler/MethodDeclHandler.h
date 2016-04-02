@@ -7,8 +7,10 @@
 #include "MethodMatcher.h"
 #include <unordered_set>
 
-namespace typegrind {
-  class MethodDeclHandler : public clang::ast_matchers::MatchFinder::MatchCallback {
+namespace typegrind
+{
+  class MethodDeclHandler : public clang::ast_matchers::MatchFinder::MatchCallback
+  {
   public:
 
     MethodDeclHandler(clang::Rewriter*& rewriter, MethodMatcher const& matchers);
