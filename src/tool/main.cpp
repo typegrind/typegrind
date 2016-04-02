@@ -4,6 +4,7 @@
 #include <clang/Tooling/Tooling.h>
 #include "clang/Frontend/TextDiagnosticPrinter.h"
 
+#include "FileUtils.h"
 #include "common/AllocationDecoratorAction.h"
 #include "common/copier/CopierAstConsumer.h"
 #include "AppConfig.h"
@@ -41,7 +42,15 @@ int main(int argc, const char **argv)
 {
   CommonOptionsParser OptionsParser(argc, argv, typegrindCategory);
 
-  AppConfig appConfig("typegrind.json");
+  std::string configFilename;
+
+  if(!typegrind::file_utils::find_using_parents("typegrind.json", configFilename))
+  {
+    llvm::errs() << "Couldn't find typegrind.json in the current directory or one of it's parents!\n";
+    return -1;
+  }
+
+  AppConfig appConfig(configFilename);
 
   if(!appConfig.isValid())
   {
