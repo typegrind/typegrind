@@ -14,29 +14,29 @@
 
 namespace typegrind {
 
-    class AllocationDecoratorAction : public clang::PluginASTAction {
-    public:
-        AllocationDecoratorAction & operator=(AllocationDecoratorAction const &) = delete;
+  class AllocationDecoratorAction : public clang::PluginASTAction {
+  public:
+    AllocationDecoratorAction & operator=(AllocationDecoratorAction const &) = delete;
 
-        AllocationDecoratorAction(AppConfig const& appConfig);
-        ~AllocationDecoratorAction();
+    AllocationDecoratorAction(AppConfig const& appConfig);
+    ~AllocationDecoratorAction();
 
-        std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance &CI, llvm::StringRef InFile) override; // plugin
+    std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance &CI, llvm::StringRef InFile) override; // plugin
 
-        std::unique_ptr<clang::ASTConsumer> newASTConsumer(); // tool
+    std::unique_ptr<clang::ASTConsumer> newASTConsumer(); // tool
 
-        bool ParseArgs (const clang::CompilerInstance &CI, const std::vector< std::string > &arg) override;
+    bool ParseArgs (const clang::CompilerInstance &CI, const std::vector< std::string > &arg) override;
 
-    protected:
-        virtual std::unique_ptr<clang::ASTConsumer> internalCreateConsumer(clang::Rewriter*& rewriter) = 0;
-    private:
+  protected:
+    virtual std::unique_ptr<clang::ASTConsumer> internalCreateConsumer(clang::Rewriter*& rewriter) = 0;
+  private:
 
-        static bool isCpp(clang::CompilerInstance const& Compiler);
+    static bool isCpp(clang::CompilerInstance const& Compiler);
 
-        clang::Rewriter* mRewriter;
-      protected:
-        AppConfig const& mAppConfig;
-    };
+    clang::Rewriter* mRewriter;
+  protected:
+    AppConfig const& mAppConfig;
+  };
 
 }
 

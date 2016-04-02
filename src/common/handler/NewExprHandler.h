@@ -10,18 +10,18 @@
 #include <unordered_set>
 
 namespace typegrind {
-    class NewExprHandler : public clang::ast_matchers::MatchFinder::MatchCallback {
-    public:
+  class NewExprHandler : public clang::ast_matchers::MatchFinder::MatchCallback {
+  public:
 
-        NewExprHandler(clang::Rewriter*& rewriter);
-        void run(const clang::ast_matchers::MatchFinder::MatchResult &Result) override;
+    NewExprHandler(clang::Rewriter*& rewriter);
+    void run(const clang::ast_matchers::MatchFinder::MatchResult &Result) override;
 
-        clang::StringRef getID() const override;
+    clang::StringRef getID() const override;
 
-    private:
-        clang::Rewriter*& mRewriter;
-        std::unordered_set<unsigned> mAlreadyEncoded;
-    };
+  private:
+    clang::Rewriter*& mRewriter;
+    std::unordered_set<unsigned> mAlreadyEncoded;
+  };
 }
 
 

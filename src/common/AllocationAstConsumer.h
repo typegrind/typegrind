@@ -16,29 +16,28 @@
 #include "AppConfig.h"
 
 namespace typegrind {
-    class AllocationASTConsumer : public clang::ASTConsumer {
-    public:
-        AllocationASTConsumer(clang::Rewriter*& rewriter, AppConfig const& appConfig);
+  class AllocationASTConsumer : public clang::ASTConsumer {
+  public:
+    AllocationASTConsumer(clang::Rewriter*& rewriter, AppConfig const& appConfig);
 
-        void HandleTranslationUnit(clang::ASTContext& context) override;
+    void HandleTranslationUnit(clang::ASTContext& context) override;
 
-    protected:
-        virtual void processRewriterData(clang::Rewriter*& rewriter);
+  protected:
+    virtual void processRewriterData(clang::Rewriter*& rewriter);
 
-    private:
-        clang::ast_matchers::MatchFinder mMatcher;
+  private:
+    clang::ast_matchers::MatchFinder mMatcher;
 
-        clang::Rewriter*& mRewriter;
+    clang::Rewriter*& mRewriter;
+    AppConfig const& mAppConfig;
 
-        AppConfig const& mAppConfig;
+    NewExprHandler mNewExprHandler;
+    OpNewExprHandler mOpNewExprHandler;
+    OpDeleteExprHandler mOpDeleteExprHandler;
+    DeleteExprHandler mDeleteExprHandler;
+    MethodDeclHandler mMethodDeclHandler;
 
-        NewExprHandler mNewExprHandler;
-        OpNewExprHandler mOpNewExprHandler;
-        OpDeleteExprHandler mOpDeleteExprHandler;
-        DeleteExprHandler mDeleteExprHandler;
-        MethodDeclHandler mMethodDeclHandler;
-
-    };
+  };
 }
 
 #endif //TYPEGRIND_CLANG_ALLOCATIONASTCONSUMER_H

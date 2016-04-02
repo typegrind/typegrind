@@ -22,7 +22,7 @@ namespace typegrind
         std::string originalFileName(Entry->getName());
 
         std::string outputFileName;
-        if(!typegrind::file_utils::canonize_path(originalFileName, outputFileName))  
+        if(!typegrind::file_utils::canonize_path(originalFileName, outputFileName))
         {
           llvm::errs() << "Error while processing entry: " << Entry->getName() << "\n";
           return;
@@ -30,17 +30,17 @@ namespace typegrind
 
         if (mapper.apply(outputFileName))
         {
-            llvm::outs() << "Writing " << outputFileName << "\n";
-            
-            if(!typegrind::file_utils::ensure_directory_exists(outputFileName))  
-            {
-              llvm::errs() << "Error while processing entry: " << Entry->getName() << "\n";
-              return;
-            }
+          llvm::outs() << "Writing " << outputFileName << "\n";
 
-            std::error_code ErrInfo;
-            llvm::raw_fd_ostream ofs(outputFileName.c_str(), ErrInfo, llvm::sys::fs::F_None);
-            it->second.write(ofs);
+          if(!typegrind::file_utils::ensure_directory_exists(outputFileName))
+          {
+            llvm::errs() << "Error while processing entry: " << Entry->getName() << "\n";
+            return;
+          }
+
+          std::error_code ErrInfo;
+          llvm::raw_fd_ostream ofs(outputFileName.c_str(), ErrInfo, llvm::sys::fs::F_None);
+          it->second.write(ofs);
         }
         else
         {

@@ -28,30 +28,32 @@ public:
   {
   }
 
-  protected:
-     std::unique_ptr<clang::ASTConsumer> internalCreateConsumer(clang::Rewriter*& rewriter) override
-     {
-       return make_unique<typegrind::CopierAstConsumer>(rewriter, mapper, mAppConfig);
-     }
-  private:
-    typegrind::DirectoryMapper mapper;
+protected:
+  std::unique_ptr<clang::ASTConsumer> internalCreateConsumer(clang::Rewriter*& rewriter) override
+  {
+    return make_unique<typegrind::CopierAstConsumer>(rewriter, mapper, mAppConfig);
+  }
+private:
+  typegrind::DirectoryMapper mapper;
 };
 
 int main(int argc, const char **argv) {
-    CommonOptionsParser OptionsParser(argc, argv, typegrindCategory);
+  CommonOptionsParser OptionsParser(argc, argv, typegrindCategory);
 
-    AppConfig appConfig("typegrind.json");
+  AppConfig appConfig("typegrind.json");
 
-    if(!appConfig.isValid())
-    {
-      llvm::errs() << appConfig.getErrorMessage() << "\n";
-      return -1;
-    }
+  if(!appConfig.isValid())
+  {
+    llvm::errs() << appConfig.getErrorMessage() << "\n";
+    return -1;
+  }
 
-    ClangTool Tool(OptionsParser.getCompilations(),
-                   OptionsParser.getSourcePathList());
+  ClangTool Tool(
+          OptionsParser.getCompilations(),
+          OptionsParser.getSourcePathList()
+  );
 
-    MyAction action(appConfig.getDirectoryMapping(), appConfig);
-    auto factory = newFrontendActionFactory(&action);
-    Tool.run(factory.get());
+  MyAction action(appConfig.getDirectoryMapping(), appConfig);
+  auto factory = newFrontendActionFactory(&action);
+  Tool.run(factory.get());
 }
