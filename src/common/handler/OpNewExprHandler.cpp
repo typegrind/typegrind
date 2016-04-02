@@ -24,8 +24,8 @@ namespace typegrind
     }
 
 
-    clang::SourceLocation startLoc = newExpr->getArg(0)->getLocStart();
-    clang::SourceLocation endLoc = newExpr->getArg(0)->getLocEnd();
+    clang::SourceLocation startLoc = newExpr->getLocStart();
+    clang::SourceLocation endLoc = newExpr->getLocEnd();
 
     if (!processingLocation(startLoc)) return;
 
@@ -63,6 +63,10 @@ namespace typegrind
       newLoggerMacro.addParameterAsString("void");
       newLoggerMacro.addParameter("0");
     }
+
+    // size, alias first parameter
+    newExpr->getArg(0)->printPretty(newLoggerMacro.startBuffer(), nullptr, clang::PrintingPolicy(result.Context->getPrintingPolicy()));
+    newLoggerMacro.startBuffer() << ", ";
 
     newLoggerMacro.commit();
   }
