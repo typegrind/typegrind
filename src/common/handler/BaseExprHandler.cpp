@@ -35,7 +35,7 @@ namespace typegrind
     else
     {
       clang::QualType baseType = typeInfo;
-      if(convertToPointee == CONVERT_TO_POINTEE && !baseType->getPointeeType().isNull())
+      if (convertToPointee == CONVERT_TO_POINTEE && !baseType->getPointeeType().isNull())
       {
         baseType = baseType->getPointeeType();
       }
@@ -48,6 +48,17 @@ namespace typegrind
       }
       macroAdder.addParameterAsString(qt.getAsString());
     }
+
   }
+
+  void BaseExprHandler::addSizeOfParameter(MacroAdder& macroAdder, clang::QualType const& typeInfo)
+  {
+    clang::LangOptions options;
+    clang::PrintingPolicy policy(options);
+    policy.SuppressUnwrittenScope = true;
+    policy.SuppressTagKeyword = true;
+    macroAdder.startBuffer() << "sizeof(" << typeInfo.getAsString(policy) << "), ";
+  }
+
 
 }

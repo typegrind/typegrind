@@ -54,7 +54,7 @@ namespace typegrind
 
       auto allocatedType = castExpr->getType()->getPointeeType();
       // 4th parameter: sizeof type
-      newLoggerMacro.addParameter("sizeof(" + allocatedType.getAsString() + ")");
+      addSizeOfParameter(newLoggerMacro, allocatedType);
     }
     else
     {

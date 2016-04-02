@@ -60,8 +60,7 @@ namespace typegrind
     addTypeInformationParameters(newLoggerMacro, newExpr->getAllocatedType());
 
     // 4th parameter: sizeof type
-    newLoggerMacro.addParameter("sizeof(" + newExpr->getAllocatedType().getAsString() + ")");
-
+    addSizeOfParameter(newLoggerMacro, newExpr->getAllocatedType());
 
     // if this is as array, there is an 5th parameter, the array size
     if (newExpr->isArray())
