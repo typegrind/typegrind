@@ -3,3 +3,4 @@ typegrind
 .repo
 logger/
 .idea
+build-*
