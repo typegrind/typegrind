@@ -11,5 +11,5 @@ namespace typegrind
 
     bool ensure_directory_exists(std::string originalPath);
   };
-};
+}
 
