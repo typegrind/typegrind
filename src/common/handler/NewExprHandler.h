@@ -5,27 +5,17 @@
 #ifndef TYPEGRIND_CLANG_NEWEXPRHANDLER_H
 #define TYPEGRIND_CLANG_NEWEXPRHANDLER_H
 
-#include <clang/ASTMatchers/ASTMatchFinder.h>
-#include <clang/Rewrite/Core/Rewriter.h>
-#include <unordered_set>
+#include "BaseExprHandler.h"
 
 namespace typegrind
 {
-  class NewExprHandler : public clang::ast_matchers::MatchFinder::MatchCallback
+  class NewExprHandler : public BaseExprHandler
   {
   public:
 
     NewExprHandler(clang::Rewriter*& rewriter);
     void run(const clang::ast_matchers::MatchFinder::MatchResult &Result) override;
-
-    clang::StringRef getID() const override;
-
-  private:
-    clang::Rewriter*& mRewriter;
-    std::unordered_set<unsigned> mAlreadyEncoded;
   };
 }
-
-
 
 #endif //TYPEGRIND_CLANG_NEWEXPRHANDLER_H
