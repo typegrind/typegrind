@@ -7,7 +7,7 @@
 namespace typegrind
 {
   OpDeleteExprHandler::OpDeleteExprHandler(clang::Rewriter*& rewriter)
-          : mRewriter(rewriter)
+          : BaseExprHandler(rewriter)
   {
   }
 
@@ -21,50 +21,25 @@ namespace typegrind
           return;
       }
 
-      auto& sm = result.Context->getSourceManager();
+      clang::SourceLocation startLoc = deleteExpr->getArg(0)->getLocStart();
+      clang::SourceLocation endLoc = deleteExpr->getArg(0)->getLocEnd();
+      if (!processingLocation(startLoc)) return;
 
-      clang::SourceLocation startLoc = deleteExpr->getLocStart();
-      // only instrument a source location once
-      if(mAlreadyEncoded.find(startLoc.getRawEncoding()) != mAlreadyEncoded.end()) return;
-      mAlreadyEncoded.insert(startLoc.getRawEncoding());
+      MacroAdder deleteLoggerMacro(
+              funDecl->getNameInfo().getName().getAsString()=="operator delete[]" ? "TYPEGRIND_LOG_OP_DELETE_ARRAY" : "TYPEGRIND_LOG_OP_DELETE",
+              startLoc,
+              endLoc,
+              mRewriter
+      );
 
+      const clang::Expr* pointerExpr = deleteExpr->getArg(0)->IgnoreCasts();
 
-      std::string macroStart = "TYPEGRIND_LOG_OP_DELETE";
-      if (funDecl->getNameInfo().getName().getAsString()=="operator delete[]")
-      {
-          macroStart += "_ARRAY";
-      }
+      // 2nd and 3rd paramter: name of the type.
+      auto deletedType = pointerExpr->getType();
+      addTypeInformationParameters(deleteLoggerMacro, deletedType);
 
-      macroStart += "(";
+      // last parameter: the pointer expression
 
-      // 1st argument: pointerAddr, which is the first argument to the call
-      // TODO: extract it to a variable!
-      llvm::raw_string_ostream os(macroStart);
-      deleteExpr->getArg(0)->printPretty(os, nullptr, clang::PrintingPolicy(result.Context->getPrintingPolicy()));
-      os.flush();
-      macroStart += ", ";
-
-      // 2nd parameter: source location. At least this is easy
-      auto ploc = sm.getPresumedLoc(deleteExpr->getLocEnd());
-      macroStart += "\"";
-      macroStart += ploc.getFilename();
-      macroStart += ":";
-      macroStart += std::to_string(ploc.getLine());
-      macroStart += "\", ";
-
-      // 3rd parameter: the delete call. It's the expression itself
-
-      mRewriter->InsertText(startLoc, macroStart);
-
-      // end added macro
-      std::string macroEnd = ")";
-
-      clang::SourceLocation endLoc = deleteExpr->getLocEnd();
-      mRewriter->InsertTextAfterToken(endLoc, macroEnd);
-  }
-
-  clang::StringRef OpDeleteExprHandler::getID() const
-  {
-      return "typegrind";
+      deleteLoggerMacro.commit();
   }
 }

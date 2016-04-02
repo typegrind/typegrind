@@ -34,7 +34,12 @@ namespace typegrind
     }
     else
     {
-      macroAdder.addParameterAsString(typeInfo.getAsString());
+      clang::QualType baseType = typeInfo;
+      if(!baseType->getPointeeType().isNull())
+      {
+        baseType = baseType->getPointeeType();
+      }
+      macroAdder.addParameterAsString(baseType.getAsString());
       clang::QualType qt = typeInfo;
       if (!qt.isCanonical()) qt = qt.getCanonicalType();
       if (!qt->getPointeeType().isNull())
