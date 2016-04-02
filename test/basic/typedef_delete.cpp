@@ -5,9 +5,10 @@
 
 int main(void)
 {
-  typedef int* intptr;
+  typedef int myint;
+  typedef myint* intptr;
   intptr pT = 0;
-  // CHECK: delete TYPEGRIND_LOG_DELETE("{{.*}}/clang-typegrind/test/basic/typedef_delete.cpp:11", "int", "int", pT);
+  // CHECK: delete TYPEGRIND_LOG_DELETE("{{.*}}/clang-typegrind/test/basic/typedef_delete.cpp:12", "myint", "int", pT);
   delete pT;
   return 0;
 }
