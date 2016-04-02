@@ -17,7 +17,7 @@ namespace typegrind {
 
         auto& sm = result.Context->getSourceManager();
 
-        clang::SourceLocation startLoc = deleteExpr->getLocStart();
+        clang::SourceLocation startLoc = deleteExpr->getArgument()->getLocStart();
         // only instrument a source location once
         if(mAlreadyEncoded.find(startLoc.getRawEncoding()) != mAlreadyEncoded.end()) return;
         mAlreadyEncoded.insert(startLoc.getRawEncoding());
@@ -29,13 +29,18 @@ namespace typegrind {
         }
         macroStart += "(";
 
-        // 1st parameter: pointer
-        {
-            llvm::raw_string_ostream os(macroStart);
-            // TODO: this assumes that the size expression is const, which isn't always true! => extract expression to a variable
-            deleteExpr->getArgument()->printPretty(os, nullptr, clang::PrintingPolicy(result.Context->getPrintingPolicy()));
-            os.flush();
-        }
+	// 1st parameter: type
+	auto deletedType = deleteExpr->getArgument()->getType();
+	if (deletedType.getTypePtr()->isTemplateTypeParmType()) {
+		// TODO: somehow add compiler specific demangle ...
+		// We could generate a (manual) specialization for this function, but for now, this is enough
+		// Let's just use type_info::name(), and demangle it somehow runtime...
+		// or maybe create an initialization code dumping the mangled names for all affected specializations? (the ones skipped by the previous return)
+		macroStart += "TYPEGRIND_DEMANGLE(typeid(" + deletedType.getAsString() + ").name()), \"TODO\"";
+	} else {
+		macroStart += "\"" + deletedType.getAsString() + "\""; // + (int)deletedType.getTypePtr()->getAsTagDecl();
+		macroStart += ", \"" + deletedType.getCanonicalType()->getPointeeType().getAsString() + "\""; // + (int)deletedType.getTypePtr()->getAsTagDecl();
+	}
         macroStart += ", ";
 
         // 2nd parameter: source location
@@ -52,7 +57,7 @@ namespace typegrind {
         // end added function call
         std::string macroEnd = ")";
 
-        clang::SourceLocation endLoc = deleteExpr->getLocEnd();
+        clang::SourceLocation endLoc = deleteExpr->getArgument()->getLocEnd();
         mRewriter->InsertTextAfterToken(endLoc, macroEnd);
     }
 
