@@ -50,7 +50,7 @@ namespace typegrind
         return;
       }
 
-      addTypeInformationParameters(newLoggerMacro, srcType);
+      addTypeInformationParameters(newLoggerMacro, srcType, CONVERT_TO_POINTEE);
 
       auto allocatedType = castExpr->getType()->getPointeeType();
       // 4th parameter: sizeof type

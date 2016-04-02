@@ -28,7 +28,9 @@ namespace typegrind
      */
     bool processingLocation(clang::SourceLocation loc);
 
-    static void addTypeInformationParameters(MacroAdder& macroAdder, clang::QualType const& typeInfo);
+
+    enum PointeeConversion { KEEP_ORIGINAL_TYPE, CONVERT_TO_POINTEE };
+    static void addTypeInformationParameters(MacroAdder& macroAdder, clang::QualType const& typeInfo, PointeeConversion convertToPointee=KEEP_ORIGINAL_TYPE);
 
   private:
     std::unordered_set<unsigned> mAlreadyProcessed;

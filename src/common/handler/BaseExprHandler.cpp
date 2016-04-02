@@ -20,7 +20,7 @@ namespace typegrind
     return true;
   }
 
-  void BaseExprHandler::addTypeInformationParameters(MacroAdder& macroAdder, clang::QualType const& typeInfo)
+  void BaseExprHandler::addTypeInformationParameters(MacroAdder& macroAdder, clang::QualType const& typeInfo, PointeeConversion convertToPointee/*=KEEP_ORIGINAL_TYPE*/)
   {
     // Currently it is the concrete name if we can place it in the source without generating a template specialization
     // otherwise it's based on typeid, so we are missing a demangle function ...
@@ -35,14 +35,14 @@ namespace typegrind
     else
     {
       clang::QualType baseType = typeInfo;
-      if(!baseType->getPointeeType().isNull())
+      if(convertToPointee == CONVERT_TO_POINTEE && !baseType->getPointeeType().isNull())
       {
         baseType = baseType->getPointeeType();
       }
       macroAdder.addParameterAsString(baseType.getAsString());
       clang::QualType qt = typeInfo;
       if (!qt.isCanonical()) qt = qt.getCanonicalType();
-      if (!qt->getPointeeType().isNull())
+      if (convertToPointee == CONVERT_TO_POINTEE && !qt->getPointeeType().isNull())
       {
         qt = qt->getPointeeType();
       }

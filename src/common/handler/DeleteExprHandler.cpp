@@ -30,8 +30,8 @@ namespace typegrind
     );
 
     // 2nd and 3rd paramter: name of the type.
-    auto deletedType = deleteExpr->getDestroyedType();
-    addTypeInformationParameters(deleteLoggerMacro, deletedType);
+    auto deletedType = deleteExpr->getArgument()->getType();
+    addTypeInformationParameters(deleteLoggerMacro, deletedType, CONVERT_TO_POINTEE);
 
     // last parameter: the pointer expression
 
