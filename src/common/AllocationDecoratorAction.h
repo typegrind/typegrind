@@ -8,6 +8,7 @@
 
 #include <clang/Frontend/FrontendPluginRegistry.h>
 #include <clang/Frontend/CompilerInstance.h>
+#include <clang/Tooling/Tooling.h>
 
 #include "common/AllocationAstConsumer.h"
 #include "AppConfig.h"
@@ -15,9 +16,11 @@
 namespace typegrind
 {
 
-  class AllocationDecoratorAction : public clang::PluginASTAction
+  class AllocationDecoratorAction : public clang::PluginASTAction, public clang::tooling::SourceFileCallbacks
   {
   public:
+    typedef clang::PluginASTAction base_type;
+
     AllocationDecoratorAction & operator=(AllocationDecoratorAction const &) = delete;
 
     AllocationDecoratorAction(AppConfig const& appConfig);
@@ -29,11 +32,9 @@ namespace typegrind
 
     bool ParseArgs (const clang::CompilerInstance &CI, const std::vector< std::string > &arg) override;
 
+    bool handleBeginSource(clang::CompilerInstance &CI, llvm::StringRef fileName) override;
   protected:
     virtual std::unique_ptr<clang::ASTConsumer> internalCreateConsumer(clang::Rewriter*& rewriter) = 0;
-  private:
-
-    static bool isCpp(clang::CompilerInstance const& Compiler);
 
     clang::Rewriter* mRewriter;
   protected:

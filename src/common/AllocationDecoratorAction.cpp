@@ -1,6 +1,15 @@
 
 #include "AllocationDecoratorAction.h"
 
+namespace
+{
+  bool isCppFile(clang::CompilerInstance const& compiler)
+  {
+    clang::LangOptions const Opts = compiler.getLangOpts();
+    return Opts.CPlusPlus;
+  }
+}
+
 namespace typegrind
 {
 
@@ -15,25 +24,31 @@ namespace typegrind
 
   AllocationDecoratorAction::AllocationDecoratorAction(AppConfig const& appConfig) : mRewriter(nullptr), mAppConfig(appConfig) { }
 
-  bool AllocationDecoratorAction::isCpp(clang::CompilerInstance const& Compiler)
-  {
-    clang::LangOptions const Opts = Compiler.getLangOpts();
-    return Opts.CPlusPlus;
-  }
-
   bool AllocationDecoratorAction::ParseArgs (const clang::CompilerInstance &CI, const std::vector< std::string > &arg)
   {
-    return true;
+    return isCppFile(CI);
   }
 
   // ..:: Entry point for plugins ::..
   std::unique_ptr<clang::ASTConsumer> AllocationDecoratorAction::newASTConsumer()
   {
+    llvm::outs() << "called2!\n";
     return internalCreateConsumer(mRewriter);
   }
 
   std::unique_ptr<clang::ASTConsumer> AllocationDecoratorAction::CreateASTConsumer(clang::CompilerInstance &CI, llvm::StringRef InFile)
   {
+    if (isCppFile(CI)) return nullptr;
+
     return internalCreateConsumer(mRewriter);
+  }
+
+  bool AllocationDecoratorAction::handleBeginSource(clang::CompilerInstance &CI, llvm::StringRef fileName)
+  {
+    llvm::outs() << "called!\n";
+    if(isCppFile(CI))
+      llvm::outs() << "cpp\n";
+
+    return isCppFile(CI);
   }
 }

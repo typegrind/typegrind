@@ -64,6 +64,6 @@ int main(int argc, const char **argv)
   );
 
   MyAction action(appConfig.getDirectoryMapping(), appConfig);
-  auto factory = newFrontendActionFactory(&action);
+  auto factory = newFrontendActionFactory(&action, &action);
   Tool.run(factory.get());
 }
