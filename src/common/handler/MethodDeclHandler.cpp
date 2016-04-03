@@ -53,19 +53,5 @@ namespace typegrind
     locStr += "\"";
 
     mRewriter->InsertTextAfterToken(insertPosition, " TYPEGRIND_LOG_METHOD_ENTER(\""+prettyName+"\", "+locStr+", \""+match->custom_name+"\", "+std::to_string(match->flags)+") ");
-
-    // if constructor - initializer lists
-    {
-      const clang::CXXConstructorDecl* constrDecl = result.Nodes.getNodeAs<clang::CXXConstructorDecl>("decl");
-      if(constrDecl)
-      {
-        for(auto initer: constrDecl->inits())
-        {
-          if(!initer->isMemberInitializer()) continue;
-          mRewriter->InsertTextAfterToken(initer->getLParenLoc(), "TYPEGRIND_LOG_METHOD_INITIALIZER(\""+prettyName+"\", "+locStr+", \""+match->custom_name+"\", "+std::to_string(match->flags)+", (");
-          mRewriter->InsertTextBefore(initer->getRParenLoc(), "))");
-        }
-      }
-    }
   }
 }
