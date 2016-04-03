@@ -53,7 +53,7 @@ namespace typegrind
     mStartBuffer << ", ";
   }
 
-  void MacroAdder::commit()
+  void MacroAdder::commitAroundLocations()
   {
     mEndBuffer << ")";
 

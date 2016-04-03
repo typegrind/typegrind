@@ -68,6 +68,6 @@ namespace typegrind
     newExpr->getArg(0)->printPretty(newLoggerMacro.startBuffer(), nullptr, clang::PrintingPolicy(result.Context->getPrintingPolicy()));
     newLoggerMacro.startBuffer() << ", ";
 
-    newLoggerMacro.commit();
+    newLoggerMacro.commitAroundLocations();
   }
 }

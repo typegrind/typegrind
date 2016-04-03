@@ -35,7 +35,7 @@ namespace typegrind
 
     // last parameter: the pointer expression
 
-    deleteLoggerMacro.commit();
+    deleteLoggerMacro.commitAroundLocations();
   }
 
 }

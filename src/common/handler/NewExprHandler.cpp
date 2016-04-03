@@ -72,6 +72,6 @@ namespace typegrind
 
     // last parameter: the constructor expression
 
-    newLoggerMacro.commit();
+    newLoggerMacro.commitAroundLocations();
   }
 }

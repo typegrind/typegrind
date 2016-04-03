@@ -18,7 +18,7 @@ namespace typegrind
     MacroAdder(std::string macroName, clang::SourceLocation startLocation, clang::SourceLocation endLocation,
                clang::Rewriter *&rewriter);
 
-    void commit();
+    void commitAroundLocations();
 
     void addParameter(std::string parameter);
 
