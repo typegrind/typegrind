@@ -12,7 +12,7 @@
 #include "common/handler/OpNewExprHandler.h"
 #include "common/handler/OpDeleteExprHandler.h"
 #include "common/handler/DeleteExprHandler.h"
-#include "common/handler/MethodDeclHandler.h"
+#include "common/handler/FunctionDeclHandler.h"
 #include "AppConfig.h"
 
 namespace typegrind
@@ -37,7 +37,7 @@ namespace typegrind
     OpNewExprHandler mOpNewExprHandler;
     OpDeleteExprHandler mOpDeleteExprHandler;
     DeleteExprHandler mDeleteExprHandler;
-    MethodDeclHandler mMethodDeclHandler;
+    FunctionDeclHandler mFunctionDeclHandler;
 
   };
 }

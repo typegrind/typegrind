@@ -61,6 +61,20 @@ namespace typegrind
     mRewriter->InsertTextAfterToken(mEndLocation, mEndBuffer.str());
   }
 
+  void MacroAdder::commitAfterStartLocation()
+  {
+    mEndBuffer << ")";
+
+    std::string startStr = mStartBuffer.str();
+    if (startStr.size() > 2 && startStr[startStr.size()-2] == ',')
+    {
+      startStr.erase(startStr.size()-2);
+    }
+
+    mRewriter->InsertTextAfterToken(mStartLocation, startStr);
+    mRewriter->InsertTextAfterToken(mStartLocation, mEndBuffer.str());
+  }
+
   void MacroAdder::addParameter(std::string parameter)
   {
     mStartBuffer << parameter << ", ";

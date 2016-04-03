@@ -20,6 +20,8 @@ namespace typegrind
 
     void commitAroundLocations();
 
+    void commitAfterStartLocation();
+
     void addParameter(std::string parameter);
 
     void addParameterAsString(std::string parameter);
