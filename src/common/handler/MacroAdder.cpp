@@ -12,11 +12,11 @@ namespace
    */
   clang::SourceLocation getLocationAtExpansionStart(clang::SourceLocation original, clang::SourceManager& sm)
   {
-    if (original.isMacroID())
+    /*if (original.isMacroID())
     {
       auto expansionRange = sm.getImmediateExpansionRange(original);
       return expansionRange.first;
-    }
+    }*/
     return original;
   }
 
@@ -26,11 +26,11 @@ namespace
    */
   clang::SourceLocation getLocationAtExpansionEnd(clang::SourceLocation original, clang::SourceManager& sm)
   {
-    if (original.isMacroID())
+    /*if (original.isMacroID())
     {
       auto expansionRange = sm.getImmediateExpansionRange(original);
       return expansionRange.second;
-    }
+    }*/
     return original;
   }
 }
@@ -55,6 +55,9 @@ namespace typegrind
 
   void MacroAdder::commitAroundLocations()
   {
+    if (mStartLocation.isMacroID()) return;
+    if (mEndLocation.isMacroID()) return;
+
     mEndBuffer << ")";
 
     mRewriter->InsertText(mStartLocation, mStartBuffer.str());
@@ -63,6 +66,9 @@ namespace typegrind
 
   void MacroAdder::commitAfterStartLocation()
   {
+    if (mStartLocation.isMacroID()) return;
+    if (mEndLocation.isMacroID()) return;
+
     mEndBuffer << ")";
 
     std::string startStr = mStartBuffer.str();
