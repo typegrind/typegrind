@@ -71,6 +71,9 @@ namespace typegrind
     }
 
     // last parameter: the constructor expression
+    // parenthesis around it, for multiple template parameters
+    newLoggerMacro.startBuffer() << "(";
+    newLoggerMacro.endBuffer() << ")";
 
     newLoggerMacro.commitAroundLocations();
   }
