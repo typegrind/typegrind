@@ -68,6 +68,10 @@ namespace typegrind
     newExpr->getArg(0)->printPretty(newLoggerMacro.startBuffer(), nullptr, clang::PrintingPolicy(result.Context->getPrintingPolicy()));
     newLoggerMacro.startBuffer() << ", ";
 
+    // parenthesis around it, for multiple template parameters
+    newLoggerMacro.startBuffer() << "(";
+    newLoggerMacro.endBuffer() << ")";
+
     newLoggerMacro.commitAroundLocations();
   }
 }

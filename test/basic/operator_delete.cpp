@@ -5,7 +5,7 @@
 
 int main(void) {
   int* pT = 0;
-  // CHECK: ::operator delete(TYPEGRIND_LOG_OP_DELETE("{{.*}}/clang-typegrind/test/basic/operator_delete.cpp:9", "int", "int", pT));
+  // CHECK: ::operator delete(TYPEGRIND_LOG_OP_DELETE("{{.*}}/clang-typegrind/test/basic/operator_delete.cpp:9", "int", "int", (pT)));
   ::operator delete(pT);
   return 0;
 }

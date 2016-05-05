@@ -6,7 +6,7 @@
 int main(void)
 {
   int* pT = 0;
-  // CHECK: delete[] TYPEGRIND_LOG_DELETE_ARRAY("{{.*}}/clang-typegrind/test/basic/array_delete.cpp:10", "int", "int", pT);
+  // CHECK: delete[] TYPEGRIND_LOG_DELETE_ARRAY("{{.*}}/clang-typegrind/test/basic/array_delete.cpp:10", "int", "int", (pT));
   delete[] pT;
   return 0;
 }

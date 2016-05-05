@@ -34,6 +34,9 @@ namespace typegrind
     addTypeInformationParameters(deleteLoggerMacro, deletedType, CONVERT_TO_POINTEE);
 
     // last parameter: the pointer expression
+    // parenthesis around it, for multiple template parameters
+    deleteLoggerMacro.startBuffer() << "(";
+    deleteLoggerMacro.endBuffer() << ")";
 
     deleteLoggerMacro.commitAroundLocations();
   }

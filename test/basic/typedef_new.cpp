@@ -7,7 +7,7 @@ int main(void)
 {
   typedef int myint;
   typedef int* intptr;
-  // CHECK: intptr pT = TYPEGRIND_LOG_NEW("{{.*}}/clang-typegrind/test/basic/typedef_new.cpp:11", "myint", "int", sizeof(myint), new myint(53));
+  // CHECK: intptr pT = TYPEGRIND_LOG_NEW("{{.*}}/clang-typegrind/test/basic/typedef_new.cpp:11", "myint", "int", sizeof(myint), (new myint(53)));
   intptr pT = new myint(53);
   return 0;
 }
