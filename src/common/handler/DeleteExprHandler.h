@@ -9,7 +9,7 @@ namespace typegrind
   {
   public:
 
-    DeleteExprHandler(clang::Rewriter*& rewriter);
+    DeleteExprHandler(clang::Rewriter*& rewriter, SpecializationHandler& specializationHandler);
     void run(const clang::ast_matchers::MatchFinder::MatchResult &Result) override;
   };
 }

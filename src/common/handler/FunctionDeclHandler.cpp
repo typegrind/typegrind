@@ -6,8 +6,8 @@
 namespace typegrind
 {
 
-  FunctionDeclHandler::FunctionDeclHandler(clang::Rewriter*& rewriter, MethodMatcher const& matchers)
-          : BaseExprHandler(rewriter)
+  FunctionDeclHandler::FunctionDeclHandler(clang::Rewriter*& rewriter, SpecializationHandler& specializationHandler, MethodMatcher const& matchers)
+          : BaseExprHandler(rewriter, specializationHandler)
           , mMatchers(matchers)
   {
   }

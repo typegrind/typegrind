@@ -4,8 +4,8 @@
 namespace typegrind
 {
 
-  DeleteExprHandler::DeleteExprHandler(clang::Rewriter *&rewriter)
-          : BaseExprHandler(rewriter)
+  DeleteExprHandler::DeleteExprHandler(clang::Rewriter *&rewriter, SpecializationHandler& specializationHandler)
+          : BaseExprHandler(rewriter, specializationHandler)
   {
   }
 
@@ -20,6 +20,14 @@ namespace typegrind
 
     clang::SourceLocation startLoc = deleteExpr->getArgument()->getLocStart();
     clang::SourceLocation endLoc = deleteExpr->getArgument()->getLocEnd();
+
+    auto deletedType = deleteExpr->getArgument()->getType();
+    auto ptr = deletedType.getTypePtr();
+    if (!ptr->isInstantiationDependentType() && !ptr->hasUnnamedOrLocalType())
+    {
+      handleSpecializedType(deletedType, startLoc.getRawEncoding(), CONVERT_TO_POINTEE);
+    }
+
     if (!processingLocation(startLoc)) return;
 
     MacroAdder deleteLoggerMacro(
@@ -30,8 +38,8 @@ namespace typegrind
     );
 
     // 2nd and 3rd paramter: name of the type.
-    auto deletedType = deleteExpr->getArgument()->getType();
-    addTypeInformationParameters(deleteLoggerMacro, deletedType, CONVERT_TO_POINTEE);
+
+    addTypeInformationParameters(deleteLoggerMacro, deletedType, startLoc.getRawEncoding(), CONVERT_TO_POINTEE);
 
     // last parameter: the pointer expression
     // parenthesis around it, for multiple template parameters

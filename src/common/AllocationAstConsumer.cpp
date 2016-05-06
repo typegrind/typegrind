@@ -12,11 +12,11 @@ namespace typegrind
   AllocationASTConsumer::AllocationASTConsumer(clang::Rewriter*& rewriter, AppConfig const& appConfig)
           : mRewriter(rewriter)
           , mAppConfig(appConfig)
-          , mNewExprHandler(mRewriter)
-          , mOpNewExprHandler(mRewriter)
-          , mOpDeleteExprHandler(mRewriter)
-          , mDeleteExprHandler(mRewriter)
-          , mFunctionDeclHandler(mRewriter, appConfig.getMethodMatcher())
+          , mNewExprHandler(mRewriter, *this)
+          , mOpNewExprHandler(mRewriter, *this)
+          , mOpDeleteExprHandler(mRewriter, *this)
+          , mDeleteExprHandler(mRewriter, *this)
+          , mFunctionDeclHandler(mRewriter, *this, appConfig.getMethodMatcher())
 
   {
     using namespace ast_matchers;
@@ -66,11 +66,52 @@ namespace typegrind
       mRewriter->InsertText(mainStartLocation, includeStmt);
     }
 
+    {
+      auto mainFile = context.getSourceManager().getMainFileID();
+      auto mainEndLocation = context.getSourceManager().getLocForEndOfFile(mainFile);
+      insertSpecializedInformation(*mRewriter, mainEndLocation);
+    }
+
     processRewriterData(mRewriter);
   }
 
   void AllocationASTConsumer::processRewriterData(clang::Rewriter*& rewriter)
   {
     // nop
+  }
+
+
+  void AllocationASTConsumer::handleSpecializedType(clang::QualType const& typeInfo, unsigned specificUniqId, SpecializationHandler::PointeeConversion convertToPointee/*=KEEP_ORIGINAL_TYPE*/)
+  {
+    clang::LangOptions options;
+    clang::PrintingPolicy policy(options);
+    policy.SuppressUnwrittenScope = true;
+    policy.SuppressTagKeyword = true;
+
+    clang::QualType ct = typeInfo;
+    if (!ct.isCanonical()) ct = ct.getCanonicalType();
+    if (convertToPointee == CONVERT_TO_POINTEE && !ct->getPointeeType().isNull())
+    {
+      ct = ct->getPointeeType();
+    }
+
+    mCanonicalSpecializations.insert(ct.getAsString(policy));
+    mSpecificSpecializations.insert(std::pair<std::string, unsigned>(ct.getAsString(policy), specificUniqId));
+  }
+
+  void AllocationASTConsumer::insertSpecializedInformation(clang::Rewriter& rewriter, clang::SourceLocation pos) const
+  {
+    std::string str = "\n\n\n";
+    for(std::string const& type: mCanonicalSpecializations)
+    {
+      str += "TYPEGRIND_CANONICAL_SPECIALIZATION((" + type + "));\n";
+    }
+
+    for(std::pair<std::string, unsigned> const& type: mSpecificSpecializations)
+    {
+      str += "TYPEGRIND_SPECIFIC_SPECIALIZATION((" + type.first + "), " + std::to_string(type.second) + ");\n";
+    }
+
+    rewriter.InsertText(pos, str);
   }
 }

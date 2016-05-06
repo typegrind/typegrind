@@ -3,8 +3,9 @@
 
 namespace typegrind
 {
-  BaseExprHandler::BaseExprHandler(clang::Rewriter*& rewriter)
+  BaseExprHandler::BaseExprHandler(clang::Rewriter*& rewriter, SpecializationHandler& specializationHandler)
           : mRewriter(rewriter)
+          , mSpecializationHandler(specializationHandler)
   {
   }
 
@@ -20,17 +21,17 @@ namespace typegrind
     return true;
   }
 
-  void BaseExprHandler::addTypeInformationParameters(MacroAdder& macroAdder, clang::QualType const& typeInfo, PointeeConversion convertToPointee/*=KEEP_ORIGINAL_TYPE*/)
+  void BaseExprHandler::addTypeInformationParameters(MacroAdder& macroAdder, clang::QualType const& typeInfo, unsigned specificUniqId, PointeeConversion convertToPointee/*=KEEP_ORIGINAL_TYPE*/)
   {
-    // Currently it is the concrete name if we can place it in the source without generating a template specialization
-    // otherwise it's based on typeid, so we are missing a demangle function ...
-    if (typeInfo.getTypePtr()->isTemplateTypeParmType())
+    clang::LangOptions options;
+    clang::PrintingPolicy policy(options);
+    policy.SuppressUnwrittenScope = true;
+    policy.SuppressTagKeyword = true;
+
+    if (typeInfo.getTypePtr()->isInstantiationDependentType())
     {
-      // TODO: generate a (manual) specialization for this function (using marker templates?)
-      // Let's just use type_info::name(), and demangle it somehow runtime...
-      // or maybe create an initialization code dumping the mangled names for all affected specializations? (the ones skipped by the previous return)
-      macroAdder.addParameter("TYPEGRIND_DEMANGLE(typeid(" + typeInfo.getAsString() + ").name())");
-      macroAdder.addParameter("\"TODO\"");
+      macroAdder.addParameter("TYPEGRIND_CANONICAL_TYPE((" + typeInfo.getAsString(policy) + "))");
+      macroAdder.addParameter("TYPEGRIND_SPECIFIC_TYPE((" + typeInfo.getAsString(policy) + "), " + std::to_string(specificUniqId) + ")");
     }
     else
     {
@@ -49,6 +50,11 @@ namespace typegrind
       macroAdder.addParameterAsString(qt.getAsString());
     }
 
+  }
+
+  void BaseExprHandler::handleSpecializedType(clang::QualType const& typeInfo, unsigned specificUniqId, PointeeConversion convertToPointee/*=KEEP_ORIGINAL_TYPE*/)
+  {
+    mSpecializationHandler.handleSpecializedType(typeInfo, specificUniqId, convertToPointee);
   }
 
   void BaseExprHandler::addSizeOfParameter(MacroAdder& macroAdder, clang::QualType const& typeInfo)

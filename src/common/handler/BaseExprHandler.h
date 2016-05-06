@@ -14,10 +14,21 @@
 
 namespace typegrind
 {
-  class BaseExprHandler : public clang::ast_matchers::MatchFinder::MatchCallback
+
+  class SpecializationHandler
   {
   public:
-    BaseExprHandler(clang::Rewriter*& rewriter);
+    enum PointeeConversion { KEEP_ORIGINAL_TYPE, CONVERT_TO_POINTEE };
+
+    virtual void handleSpecializedType(clang::QualType const& typeInfo, unsigned specificUniqId, PointeeConversion convertToPointee=KEEP_ORIGINAL_TYPE) = 0;
+  };
+
+  class BaseExprHandler : public clang::ast_matchers::MatchFinder::MatchCallback, public SpecializationHandler
+  {
+  public:
+    BaseExprHandler(clang::Rewriter*& rewriter, SpecializationHandler& specializationHandler);
+
+    void handleSpecializedType(clang::QualType const& typeInfo, unsigned specificUniqId, PointeeConversion convertToPointee=KEEP_ORIGINAL_TYPE) override;
 
     clang::StringRef getID() const final;
   protected:
@@ -29,13 +40,14 @@ namespace typegrind
     bool processingLocation(clang::SourceLocation loc);
 
 
-    enum PointeeConversion { KEEP_ORIGINAL_TYPE, CONVERT_TO_POINTEE };
-    static void addTypeInformationParameters(MacroAdder& macroAdder, clang::QualType const& typeInfo, PointeeConversion convertToPointee=KEEP_ORIGINAL_TYPE);
+
+    void addTypeInformationParameters(MacroAdder& macroAdder, clang::QualType const& typeInfo, unsigned specificUniqId, PointeeConversion convertToPointee=KEEP_ORIGINAL_TYPE);
 
     static void addSizeOfParameter(MacroAdder& macroAdder, clang::QualType const& typeInfo);
 
   private:
     std::unordered_set<unsigned> mAlreadyProcessed;
+    SpecializationHandler& mSpecializationHandler;
   };
 }
 

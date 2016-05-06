@@ -6,8 +6,8 @@
 
 namespace typegrind
 {
-  OpNewExprHandler::OpNewExprHandler(clang::Rewriter*& rewriter)
-          : BaseExprHandler(rewriter)
+  OpNewExprHandler::OpNewExprHandler(clang::Rewriter*& rewriter, SpecializationHandler& specializationHandler)
+          : BaseExprHandler(rewriter, specializationHandler)
   {
   }
 
@@ -27,6 +27,16 @@ namespace typegrind
     clang::SourceLocation startLoc = newExpr->getLocStart();
     clang::SourceLocation endLoc = newExpr->getLocEnd();
 
+    if (castExpr)
+    {
+      // Add info for every non dependent type
+      auto ptr = castExpr->getTypeInfoAsWritten()->getTypeLoc().getType().getTypePtr();
+      if (!ptr->isInstantiationDependentType() && !ptr->hasUnnamedOrLocalType())
+      {
+        handleSpecializedType(castExpr->getTypeInfoAsWritten()->getTypeLoc().getType(), startLoc.getRawEncoding(), CONVERT_TO_POINTEE);
+      }
+    }
+
     if (!processingLocation(startLoc)) return;
 
 
@@ -41,16 +51,8 @@ namespace typegrind
     if (castExpr)
     {
       auto srcType = castExpr->getTypeInfoAsWritten()->getTypeLoc().getType();
-      auto ptr = srcType.getTypePtr()->getAs<clang::SubstTemplateTypeParmType>();
-      // Skipping substituted template types
-      if (ptr)
-      {
-        // This is an automatic template specialization.
-        // TODO: better condition? TEST IT!
-        return;
-      }
 
-      addTypeInformationParameters(newLoggerMacro, srcType, CONVERT_TO_POINTEE);
+      addTypeInformationParameters(newLoggerMacro, srcType, startLoc.getRawEncoding(), CONVERT_TO_POINTEE);
 
       auto allocatedType = castExpr->getType()->getPointeeType();
       // 4th parameter: sizeof type

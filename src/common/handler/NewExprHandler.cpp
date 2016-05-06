@@ -19,8 +19,8 @@ namespace
 namespace typegrind
 {
 
-  NewExprHandler::NewExprHandler(clang::Rewriter*& rewriter)
-          : BaseExprHandler(rewriter)
+  NewExprHandler::NewExprHandler(clang::Rewriter*& rewriter, SpecializationHandler& specializationHandler)
+          : BaseExprHandler(rewriter, specializationHandler)
   {
   }
 
@@ -35,7 +35,18 @@ namespace typegrind
 
     clang::SourceLocation startLoc = newExpr->getStartLoc();
     clang::SourceLocation endLoc = newExpr->getEndLoc();
-    if (!processingLocation(startLoc)) return;
+
+    // Add info for every non dependent type
+    auto ptr = newExpr->getAllocatedType().getTypePtr();
+    if (!ptr->isInstantiationDependentType() && !ptr->hasUnnamedOrLocalType())
+    {
+      handleSpecializedType(newExpr->getAllocatedType(), startLoc.getRawEncoding());
+    }
+
+    if (!processingLocation(startLoc)) {
+      llvm::errs() << "pproc\n";
+      return;
+    }
 
     if (isPlacementNew(newExpr)) return;
 
@@ -46,18 +57,8 @@ namespace typegrind
             mRewriter
     );
 
-    // Skipping substituted template types
-    auto srcType = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
-    auto ptr = srcType.getType().getTypePtr()->getAs<clang::SubstTemplateTypeParmType>();
-    if (ptr)
-    {
-      // This is an automatic template specialization.
-      // TODO: better condition? TEST IT!
-      return;
-    }
-
     // 2nd and 3rd paramter: name of the type.
-    addTypeInformationParameters(newLoggerMacro, newExpr->getAllocatedType());
+    addTypeInformationParameters(newLoggerMacro, newExpr->getAllocatedType(), startLoc.getRawEncoding());
 
     // 4th parameter: sizeof type
     addSizeOfParameter(newLoggerMacro, newExpr->getAllocatedType());

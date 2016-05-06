@@ -13,7 +13,7 @@ namespace typegrind
   {
   public:
 
-    NewExprHandler(clang::Rewriter*& rewriter);
+    NewExprHandler(clang::Rewriter*& rewriter, SpecializationHandler& specializationHandler);
     void run(const clang::ast_matchers::MatchFinder::MatchResult &Result) override;
   };
 }

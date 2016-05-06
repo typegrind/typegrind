@@ -10,7 +10,7 @@ namespace typegrind
   {
   public:
 
-    FunctionDeclHandler(clang::Rewriter*& rewriter, MethodMatcher const& matchers);
+    FunctionDeclHandler(clang::Rewriter*& rewriter, SpecializationHandler& specializationHandler, MethodMatcher const& matchers);
     void run(const clang::ast_matchers::MatchFinder::MatchResult &Result) override;
   private:
     MethodMatcher const& mMatchers;
