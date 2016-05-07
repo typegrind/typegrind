@@ -1,3 +1,4 @@
+#!/bin/bash
 
 mkdir vendor/ejdb/build
 mkdir vendor/ejdb-install
