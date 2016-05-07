@@ -4,3 +4,4 @@ typegrind
 logger/
 .idea
 build-*
+example-*
