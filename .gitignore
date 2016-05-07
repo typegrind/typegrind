@@ -1,5 +1,6 @@
 vendor
 typegrind
+example
 .repo
 logger/
 .idea
