@@ -1,8 +1,8 @@
 vendor
 typegrind
-example
+examples
 .repo
 logger/
 .idea
 build-*
-example-*
+examples-*
