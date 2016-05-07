@@ -30,8 +30,13 @@ namespace typegrind
 
     if (typeInfo.getTypePtr()->isInstantiationDependentType())
     {
-      macroAdder.addParameter("TYPEGRIND_CANONICAL_TYPE((" + typeInfo.getAsString(policy) + "))");
-      macroAdder.addParameter("TYPEGRIND_SPECIFIC_TYPE((" + typeInfo.getAsString(policy) + "), " + std::to_string(specificUniqId) + ")");
+      clang::QualType baseType = typeInfo;
+      if (convertToPointee == CONVERT_TO_POINTEE && !baseType->getPointeeType().isNull())
+      {
+        baseType = baseType->getPointeeType();
+      }
+      macroAdder.addParameter("TYPEGRIND_CANONICAL_TYPE(TYPEGRIND_TYPE(" + baseType.getAsString(policy) + "))");
+      macroAdder.addParameter("TYPEGRIND_SPECIFIC_TYPE(TYPEGRIND_TYPE(" + baseType.getAsString(policy) + "), " + std::to_string(specificUniqId) + ")");
     }
     else
     {

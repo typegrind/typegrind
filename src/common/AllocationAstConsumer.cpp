@@ -104,12 +104,12 @@ namespace typegrind
     std::string str = "\n\n\n";
     for(std::string const& type: mCanonicalSpecializations)
     {
-      str += "TYPEGRIND_CANONICAL_SPECIALIZATION((" + type + "));\n";
+      str += "TYPEGRIND_CANONICAL_SPECIALIZATION(TYPEGRIND_TYPE(" + type + "));\n";
     }
 
     for(std::pair<std::string, unsigned> const& type: mSpecificSpecializations)
     {
-      str += "TYPEGRIND_SPECIFIC_SPECIALIZATION((" + type.first + "), " + std::to_string(type.second) + ");\n";
+      str += "TYPEGRIND_SPECIFIC_SPECIALIZATION(TYPEGRIND_TYPE(" + type.first + "), " + std::to_string(type.second) + ");\n";
     }
 
     rewriter.InsertText(pos, str);
