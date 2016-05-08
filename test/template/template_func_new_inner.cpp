@@ -6,7 +6,7 @@
 template<typename T>
 void creator()
 {
-  // CHECK: T* ptr = TYPEGRIND_LOG_NEW("{{.*}}/clang-typegrind/test/template/template_func_new_inner.cpp:10", TYPEGRIND_CANONICAL_TYPE((T)), TYPEGRIND_SPECIFIC_TYPE((T), {{[0-9]*}}), sizeof(T), (new T));
+  // CHECK: T* ptr = TYPEGRIND_LOG_NEW("{{.*}}/clang-typegrind/test/template/template_func_new_inner.cpp:10", TYPEGRIND_CANONICAL_TYPE(TYPEGRIND_TYPE(T)), TYPEGRIND_SPECIFIC_TYPE(TYPEGRIND_TYPE(T), {{[0-9]*}}), sizeof(T), (new T));
   T* ptr = new T;
 }
 
@@ -22,5 +22,5 @@ int main(void)
   return 0;
 }
 
-// CHECK: TYPEGRIND_CANONICAL_SPECIALIZATION((C::S));
-// CHECK: TYPEGRIND_SPECIFIC_SPECIALIZATION((C::S), {{[0-9]*}});
+// CHECK: TYPEGRIND_CANONICAL_SPECIALIZATION(TYPEGRIND_TYPE(C::S));
+// CHECK: TYPEGRIND_SPECIFIC_SPECIALIZATION(TYPEGRIND_TYPE(C::S), {{[0-9]*}});
