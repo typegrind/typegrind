@@ -22,6 +22,8 @@ namespace typegrind
 
     void commitAfterStartLocation();
 
+    void commitBeforeStartLocation();
+
     void addParameter(std::string parameter);
 
     void addParameterAsString(std::string parameter);
