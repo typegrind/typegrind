@@ -8,6 +8,10 @@ using namespace clang;
 
 namespace typegrind
 {
+  bool operator==(SpecializedInfo const& a, SpecializedInfo const& b)
+  {
+    return a.canonicalName == b.canonicalName && a.specificName == b.specificName && a.uniqueId == b.uniqueId;
+  }
 
   AllocationASTConsumer::AllocationASTConsumer(clang::Rewriter*& rewriter, AppConfig const& appConfig)
           : mRewriter(rewriter)
@@ -90,6 +94,12 @@ namespace typegrind
     policy.SuppressUnwrittenScope = true;
     policy.SuppressTagKeyword = true;
 
+    clang::QualType st = typeInfo;
+    if (convertToPointee == CONVERT_TO_POINTEE && !st->getPointeeType().isNull())
+    {
+      st = st->getPointeeType();
+    }
+
     clang::QualType ct = typeInfo;
     if (!ct.isCanonical()) ct = ct.getCanonicalType();
     if (convertToPointee == CONVERT_TO_POINTEE && !ct->getPointeeType().isNull())
@@ -98,7 +108,7 @@ namespace typegrind
     }
 
     mCanonicalSpecializations.insert(ct.getAsString(policy));
-    mSpecificSpecializations.insert(std::pair<std::string, unsigned>(ct.getAsString(policy), specificUniqId));
+    mSpecificSpecializations.insert(SpecializedInfo{ct.getAsString(policy), st.getAsString(policy), specificUniqId});
   }
 
   void AllocationASTConsumer::insertSpecializedInformation(clang::Rewriter& rewriter, clang::SourceLocation pos) const
@@ -109,9 +119,9 @@ namespace typegrind
       str += "TYPEGRIND_CANONICAL_SPECIALIZATION(TYPEGRIND_TYPE(" + type + "));\n";
     }
 
-    for(std::pair<std::string, unsigned> const& type: mSpecificSpecializations)
+    for(auto const& type: mSpecificSpecializations)
     {
-      str += "TYPEGRIND_SPECIFIC_SPECIALIZATION(TYPEGRIND_TYPE(" + type.first + "), " + std::to_string(type.second) + ");\n";
+      str += "TYPEGRIND_SPECIFIC_SPECIALIZATION(TYPEGRIND_TYPE(" + type.canonicalName + "), TYPEGRIND_TYPE(" +  type.specificName + "), " + std::to_string(type.uniqueId) + ");\n";
     }
 
     rewriter.InsertText(pos, str);

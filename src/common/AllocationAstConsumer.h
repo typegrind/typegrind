@@ -21,6 +21,23 @@
 
 namespace typegrind
 {
+  struct SpecializedInfo
+  {
+     std::string canonicalName;
+     std::string specificName;
+     unsigned uniqueId;
+  };
+
+  struct SpecializedInfoHasher {
+    int operator()(SpecializedInfo const& info) const noexcept
+    {
+      using namespace std;
+      hash<std::string> hasher;
+      return hasher(info.canonicalName) + hasher(info.specificName) + info.uniqueId;
+    }
+  };
+
+  bool operator==(SpecializedInfo const& a, SpecializedInfo const& b);
 
   class AllocationASTConsumer : public clang::ASTConsumer, public SpecializationHandler
   {
@@ -49,7 +66,8 @@ namespace typegrind
     RecordDeclHandler mRecordDeclHandler;
 
     std::unordered_set<std::string> mCanonicalSpecializations;
-    std::set< std::pair<std::string, unsigned> > mSpecificSpecializations;
+
+    std::unordered_set< SpecializedInfo, SpecializedInfoHasher > mSpecificSpecializations;
 
   };
 }
