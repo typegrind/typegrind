@@ -16,6 +16,7 @@
 #include "common/handler/OpDeleteExprHandler.h"
 #include "common/handler/DeleteExprHandler.h"
 #include "common/handler/FunctionDeclHandler.h"
+#include "common/handler/RecordDeclHandler.h"
 #include "AppConfig.h"
 
 namespace typegrind
@@ -45,6 +46,7 @@ namespace typegrind
     OpDeleteExprHandler mOpDeleteExprHandler;
     DeleteExprHandler mDeleteExprHandler;
     FunctionDeclHandler mFunctionDeclHandler;
+    RecordDeclHandler mRecordDeclHandler;
 
     std::unordered_set<std::string> mCanonicalSpecializations;
     std::set< std::pair<std::string, unsigned> > mSpecificSpecializations;

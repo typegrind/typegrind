@@ -44,7 +44,6 @@ namespace typegrind
     }
 
     if (!processingLocation(startLoc)) {
-      llvm::errs() << "pproc\n";
       return;
     }
 

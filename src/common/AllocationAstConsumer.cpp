@@ -17,11 +17,13 @@ namespace typegrind
           , mOpDeleteExprHandler(mRewriter, *this)
           , mDeleteExprHandler(mRewriter, *this)
           , mFunctionDeclHandler(mRewriter, *this, appConfig.getMethodMatcher())
+          , mRecordDeclHandler(mRewriter, *this)
 
   {
     using namespace ast_matchers;
     mMatcher.addMatcher(cxxNewExpr().bind("newStmt"), &mNewExprHandler);
     mMatcher.addMatcher(functionDecl().bind("decl"), &mFunctionDeclHandler);
+    mMatcher.addMatcher(cxxRecordDecl().bind("decl"), &mRecordDeclHandler);
     mMatcher.addMatcher(
             callExpr(callee(functionDecl(hasName("operator new")).bind("fun")), hasAncestor(cxxStaticCastExpr().bind("castExpr"))).bind("newStmt") ,
             &mOpNewExprHandler

@@ -32,7 +32,6 @@ namespace typegrind
   // ..:: Entry point for plugins ::..
   std::unique_ptr<clang::ASTConsumer> AllocationDecoratorAction::newASTConsumer()
   {
-    llvm::outs() << "called2!\n";
     return internalCreateConsumer(mRewriter);
   }
 
@@ -45,7 +44,6 @@ namespace typegrind
 
   bool AllocationDecoratorAction::handleBeginSource(clang::CompilerInstance &CI, llvm::StringRef fileName)
   {
-    llvm::outs() << "called!\n";
     if(isCppFile(CI))
       llvm::outs() << "cpp\n";
 
