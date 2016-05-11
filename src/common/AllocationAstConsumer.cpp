@@ -37,8 +37,27 @@ namespace typegrind
             &mOpNewExprHandler
     );
     mMatcher.addMatcher(
+            callExpr(callee(functionDecl(hasName("operator new")).bind("fun")), hasAncestor(cStyleCastExpr().bind("castExpr"))).bind("newStmt"),
+            &mOpNewExprHandler
+    );
+    mMatcher.addMatcher(
+            callExpr(callee(functionDecl(hasName("operator new")).bind("fun"))).bind("newStmt"), &mOpNewExprHandler
+    );
+
+    mMatcher.addMatcher(
             callExpr(callee(functionDecl(hasName("operator new[]")).bind("fun")), hasAncestor(cxxReinterpretCastExpr().bind("castExpr"))).bind("newStmt"),
             &mOpNewExprHandler
+    );
+    mMatcher.addMatcher(
+            callExpr(callee(functionDecl(hasName("operator new[]")).bind("fun")), hasAncestor(cxxStaticCastExpr().bind("castExpr"))).bind("newStmt"),
+            &mOpNewExprHandler
+    );
+    mMatcher.addMatcher(
+            callExpr(callee(functionDecl(hasName("operator new[]")).bind("fun")), hasAncestor(cStyleCastExpr().bind("castExpr"))).bind("newStmt"),
+            &mOpNewExprHandler
+    );
+    mMatcher.addMatcher(
+            callExpr(callee(functionDecl(hasName("operator new[]")).bind("fun"))).bind("newStmt"), &mOpNewExprHandler
     );
 
     mMatcher.addMatcher(cxxDeleteExpr().bind("deleteStmt"), &mDeleteExprHandler);
