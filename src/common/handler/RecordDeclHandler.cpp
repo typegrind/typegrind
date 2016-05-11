@@ -22,8 +22,10 @@ namespace typegrind
     if (!insertPosition.isValid()) return;
     if (!processingLocation(insertPosition)) return;
 
+    std::string name = decl->isExternCContext() ? "TYPEGRIND_RECORD_APPEND_C" : "TYPEGRIND_RECORD_APPEND";
+
     MacroAdder recordEndMacroAdder(
-            "TYPEGRIND_RECORD_APPEND",
+            name,
             insertPosition,
             insertPosition,
             mRewriter
