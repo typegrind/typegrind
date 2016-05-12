@@ -33,6 +33,8 @@ namespace typegrind
       return;
     }
 
+    if (isPlacementNew(newExpr)) return;
+
     clang::SourceLocation startLoc = newExpr->getStartLoc();
     clang::SourceLocation endLoc = newExpr->getEndLoc();
 
@@ -46,8 +48,6 @@ namespace typegrind
     if (!processingLocation(startLoc)) {
       return;
     }
-
-    if (isPlacementNew(newExpr)) return;
 
     MacroAdder newLoggerMacro(
             newExpr->isArray() ? "TYPEGRIND_LOG_NEW_ARRAY" : "TYPEGRIND_LOG_NEW",
