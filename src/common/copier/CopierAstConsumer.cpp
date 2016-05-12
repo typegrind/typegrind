@@ -49,5 +49,7 @@ namespace typegrind
         }
       }
     }
+    delete rewriter;
+    rewriter = nullptr;
   }
 }
