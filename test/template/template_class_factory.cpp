@@ -9,7 +9,7 @@ class C {
 
     static void f()
     {
-      // CHECK: S* ptr = TYPEGRIND_LOG_NEW("{{.*}}/clang-typegrind/test/template/template_class_factory.cpp:13", TYPEGRIND_CANONICAL_TYPE(TYPEGRIND_TYPE(C::S)), TYPEGRIND_SPECIFIC_TYPE(TYPEGRIND_TYPE(C::S), {{[0-9]*}}), sizeof(C::S), (new S));
+      // CHECK: S* ptr = TYPEGRIND_LOG_NEW("{{.*}}/clang-typegrind/test/template/template_class_factory.cpp:13", TYPEGRIND_CANONICAL_TYPE(TYPEGRIND_TYPE(C::S)), TYPEGRIND_SPECIFIC_TYPE(TYPEGRIND_TYPE(C::S), {{[0-9]*}}), (new S), sizeof(C::S));
       S* ptr = new S;
     }
 };

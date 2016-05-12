@@ -49,31 +49,43 @@ namespace typegrind
       return;
     }
 
+    bool isDependentType = isReallyDependentType(newExpr->getAllocatedType());
+    std::string newMacroName(newExpr->isArray() ? "TYPEGRIND_LOG_NEW_ARRAY" : "TYPEGRIND_LOG_NEW");
+
     MacroAdder newLoggerMacro(
-            newExpr->isArray() ? "TYPEGRIND_LOG_NEW_ARRAY" : "TYPEGRIND_LOG_NEW",
+            isDependentType ? "TYPEGRIND_EXPAND_DECLTYPE_SIZEOF" : newMacroName,
             startLoc,
             endLoc,
             mRewriter
     );
 
-    // 2nd and 3rd paramter: name of the type.
-    addTypeInformationParameters(newLoggerMacro, newExpr->getAllocatedType(), startLoc.getRawEncoding());
-
-    // 4th parameter: sizeof type
-    addSizeOfParameter(newLoggerMacro, newExpr->getAllocatedType());
-
-    // if this is as array, there is an 5th parameter, the array size
-    if (newExpr->isArray())
+    if (isDependentType)
     {
-      // TODO: this assumes that the size expression is const, which isn't always true! => extract expression to a variable ?
-      newExpr->getArraySize()->printPretty(newLoggerMacro.startBuffer(), nullptr, clang::PrintingPolicy(result.Context->getPrintingPolicy()));
-      newLoggerMacro.startBuffer() << ", ";
+      newLoggerMacro.addParameter(newMacroName);
+      newLoggerMacro.addParameter(std::to_string(startLoc.getRawEncoding()));
+    } 
+    else
+    {
+      addTypeInformationParameters(newLoggerMacro, newExpr->getAllocatedType(), startLoc.getRawEncoding());
     }
 
     // last parameter: the constructor expression
     // parenthesis around it, for multiple template parameters
     newLoggerMacro.startBuffer() << "(";
     newLoggerMacro.endBuffer() << ")";
+
+    if (!isDependentType)
+    {
+      addSizeOfParameter(newLoggerMacro, newExpr->getAllocatedType());
+    }
+
+    // if this is as array, there is an 5th parameter, the array size
+    if (newExpr->isArray())
+    {
+      // TODO: this assumes that the size expression is const, which isn't always true! => extract expression to a variable ?
+      newLoggerMacro.endBuffer() << ", ";
+      newExpr->getArraySize()->printPretty(newLoggerMacro.endBuffer(), nullptr, clang::PrintingPolicy(result.Context->getPrintingPolicy()));
+    }
 
     newLoggerMacro.commitAroundLocations();
   }

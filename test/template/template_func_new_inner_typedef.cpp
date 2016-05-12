@@ -8,7 +8,7 @@ void creator()
 {
   typedef T value_type;
 
-  // CHECK: value_type* ptr = TYPEGRIND_LOG_NEW("{{.*}}/clang-typegrind/test/template/template_func_new_inner_typedef.cpp:12", TYPEGRIND_CANONICAL_TYPE(TYPEGRIND_TYPE(value_type)), TYPEGRIND_SPECIFIC_TYPE(TYPEGRIND_TYPE(value_type), {{[0-9]*}}), sizeof(value_type), (new value_type));
+  // CHECK: value_type* ptr = TYPEGRIND_LOG_NEW("{{.*}}/clang-typegrind/test/template/template_func_new_inner_typedef.cpp:12", TYPEGRIND_CANONICAL_TYPE(TYPEGRIND_TYPE(value_type)), TYPEGRIND_SPECIFIC_TYPE(TYPEGRIND_TYPE(value_type), {{[0-9]*}}), (new value_type), sizeof(value_type));
   value_type* ptr = new value_type;
 }
 

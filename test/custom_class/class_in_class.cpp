@@ -7,7 +7,7 @@ class C { public: class I {}; };
 
 int main(void)
 {
-  // CHECK: C::I* pT = TYPEGRIND_LOG_NEW("{{.*}}/clang-typegrind/test/custom_class/class_in_class.cpp:11", "class C::I", "class C::I", sizeof(C::I), (new C::I()));
+  // CHECK: C::I* pT = TYPEGRIND_LOG_NEW("{{.*}}/clang-typegrind/test/custom_class/class_in_class.cpp:11", "class C::I", "class C::I", (new C::I()), sizeof(C::I));
   C::I* pT = new C::I();
   return 0;
 }

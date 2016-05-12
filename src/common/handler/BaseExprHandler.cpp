@@ -21,6 +21,23 @@ namespace typegrind
     return true;
   }
 
+  bool BaseExprHandler::isReallyDependentType(clang::QualType const& typeInfo, PointeeConversion convertToPointee /*=KEEP_ORIGINAL_TYPE*/)
+  {
+    clang::LangOptions options;
+    clang::PrintingPolicy policy(options);
+    policy.SuppressUnwrittenScope = true;
+    policy.SuppressTagKeyword = true;
+
+    clang::QualType baseType = typeInfo;
+    if (convertToPointee == CONVERT_TO_POINTEE && !baseType->getPointeeType().isNull())
+    {
+      baseType = baseType->getPointeeType();
+    }
+    // TODO: better!
+    std::string name = baseType.getAsString(policy);
+    return name == "<dependent-type>";
+  }
+
   void BaseExprHandler::addTypeInformationParameters(MacroAdder& macroAdder, clang::QualType const& typeInfo, unsigned specificUniqId, PointeeConversion convertToPointee/*=KEEP_ORIGINAL_TYPE*/)
   {
     clang::LangOptions options;
@@ -38,7 +55,7 @@ namespace typegrind
       macroAdder.addParameter("TYPEGRIND_CANONICAL_TYPE(TYPEGRIND_TYPE(" + baseType.getAsString(policy) + "))");
       macroAdder.addParameter("TYPEGRIND_SPECIFIC_TYPE(TYPEGRIND_TYPE(" + baseType.getAsString(policy) + "), " + std::to_string(specificUniqId) + ")");
     }
-    else
+    else 
     {
       clang::QualType baseType = typeInfo;
       if (convertToPointee == CONVERT_TO_POINTEE && !baseType->getPointeeType().isNull())
@@ -68,7 +85,7 @@ namespace typegrind
     clang::PrintingPolicy policy(options);
     policy.SuppressUnwrittenScope = true;
     policy.SuppressTagKeyword = true;
-    macroAdder.startBuffer() << "sizeof(" << typeInfo.getAsString(policy) << "), ";
+    macroAdder.endBuffer() << ", sizeof(" << typeInfo.getAsString(policy) << ")";
   }
 
 

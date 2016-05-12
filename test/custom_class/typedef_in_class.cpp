@@ -7,7 +7,7 @@ class C { public: typedef int T; };
 
 int main(void)
 {
-  // CHECK: C::T* pT = TYPEGRIND_LOG_NEW("{{.*}}/clang-typegrind/test/custom_class/typedef_in_class.cpp:11", "class C::T", "int", sizeof(C::T), (new C::T()));
+  // CHECK: C::T* pT = TYPEGRIND_LOG_NEW("{{.*}}/clang-typegrind/test/custom_class/typedef_in_class.cpp:11", "class C::T", "int", (new C::T()), sizeof(C::T));
   C::T* pT = new C::T();
   return 0;
 }

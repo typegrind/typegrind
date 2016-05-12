@@ -7,7 +7,7 @@ namespace N { class C {  }; }
 
 int main(void)
 {
-  // CHECK: N::C* pT = TYPEGRIND_LOG_NEW("{{.*}}/clang-typegrind/test/custom_class/class_in_namespace.cpp:11", "N::C", "class N::C", sizeof(N::C), (new N::C()));
+  // CHECK: N::C* pT = TYPEGRIND_LOG_NEW("{{.*}}/clang-typegrind/test/custom_class/class_in_namespace.cpp:11", "N::C", "class N::C", (new N::C()), sizeof(N::C));
   N::C* pT = new N::C();
   return 0;
 }

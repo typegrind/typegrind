@@ -5,7 +5,7 @@
 
 int main(void)
 {
-  // CHECK: int* pT = TYPEGRIND_LOG_NEW_ARRAY("{{.*}}/clang-typegrind/test/basic/array_new.cpp:9", "int", "int", sizeof(int), 53, (new int[53]));
+  // CHECK: int* pT = TYPEGRIND_LOG_NEW_ARRAY("{{.*}}/clang-typegrind/test/basic/array_new.cpp:9", "int", "int", (new int[53]), sizeof(int), 53);
   int* pT = new int[53];
   return 0;
 }

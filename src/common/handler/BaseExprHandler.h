@@ -41,6 +41,7 @@ namespace typegrind
 
 
 
+    static bool isReallyDependentType(clang::QualType const& typeInfo, PointeeConversion convertToPointee=KEEP_ORIGINAL_TYPE);
     void addTypeInformationParameters(MacroAdder& macroAdder, clang::QualType const& typeInfo, unsigned specificUniqId, PointeeConversion convertToPointee=KEEP_ORIGINAL_TYPE);
 
     static void addSizeOfParameter(MacroAdder& macroAdder, clang::QualType const& typeInfo);

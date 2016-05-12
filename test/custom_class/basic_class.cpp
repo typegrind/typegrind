@@ -9,7 +9,7 @@ class C {
 
 int main(void)
 {
-  // CHECK: C* pT = TYPEGRIND_LOG_NEW("{{.*}}/clang-typegrind/test/custom_class/basic_class.cpp:13", "class C", "class C", sizeof(C), (new C()));
+  // CHECK: C* pT = TYPEGRIND_LOG_NEW("{{.*}}/clang-typegrind/test/custom_class/basic_class.cpp:13", "class C", "class C", (new C()), sizeof(C));
   C* pT = new C();
   return 0;
 }

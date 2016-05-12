@@ -54,6 +54,10 @@ namespace typegrind
 
       addTypeInformationParameters(newLoggerMacro, srcType, startLoc.getRawEncoding(), CONVERT_TO_POINTEE);
 
+      // parenthesis around it, for multiple template parameters
+      newLoggerMacro.startBuffer() << "(";
+      newLoggerMacro.endBuffer() << ")";
+
       auto allocatedType = castExpr->getType()->getPointeeType();
       // 4th parameter: sizeof type
       addSizeOfParameter(newLoggerMacro, allocatedType);
@@ -63,16 +67,18 @@ namespace typegrind
       // no idea about the type
       newLoggerMacro.addParameterAsString("void");
       newLoggerMacro.addParameterAsString("void");
-      newLoggerMacro.addParameter("0");
+
+      // parenthesis around it, for multiple template parameters
+      newLoggerMacro.startBuffer() << "(";
+      newLoggerMacro.endBuffer() << ")";
+
+      newLoggerMacro.endBuffer() << ", 1";
     }
 
     // size, alias first parameter
-    newExpr->getArg(0)->printPretty(newLoggerMacro.startBuffer(), nullptr, clang::PrintingPolicy(result.Context->getPrintingPolicy()));
-    newLoggerMacro.startBuffer() << ", ";
+    newLoggerMacro.endBuffer() << ", ";
+    newExpr->getArg(0)->printPretty(newLoggerMacro.endBuffer(), nullptr, clang::PrintingPolicy(result.Context->getPrintingPolicy()));
 
-    // parenthesis around it, for multiple template parameters
-    newLoggerMacro.startBuffer() << "(";
-    newLoggerMacro.endBuffer() << ")";
 
     newLoggerMacro.commitAroundLocations();
   }
