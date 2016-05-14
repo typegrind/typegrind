@@ -43,12 +43,39 @@ AppConfig::AppConfig(std::string filename) : errorMessage("") {
     auto prepend_it = mainConfig.find("prepend_include");
     if (prepend_it != mainConfig.end()) {
       if (prepend_it->second.is<std::string>()) {
-        prepend_include.push_back(prepend_it->second.to_str());
+        getPrependRecordFor(prepend_it->second.to_str())
+            .addFileType(FileType::CPP)
+            .addFileType(FileType::C);
       } else if (prepend_it->second.is<picojson::array>()) {
         const picojson::value::array& prepends = prepend_it->second.get<picojson::array>();
         for (auto const& prep : prepends) {
-          prepend_include.push_back(prep.to_str());
+          getPrependRecordFor(prep.to_str()).addFileType(FileType::CPP).addFileType(FileType::C);
         }
+      } else if (prepend_it->second.is<picojson::object>()) {
+        const picojson::value::object& prepends = prepend_it->second.get<picojson::object>();
+        for (auto const& pair : prepends) {
+          if (!pair.second.is<picojson::array>()) {
+            errorMessage = "prepend_include can only contain arrays!";
+            return;
+          }
+          FileType ft;
+          if (pair.first == "c") {
+            ft = FileType::C;
+          } else if (pair.first == "cpp") {
+            ft = FileType::CPP;
+          } else {
+            errorMessage = "unknown key in prepend_include: " + pair.first;
+            return;
+          }
+
+          const picojson::value::array& filelist = prepend_it->second.get<picojson::array>();
+          for (auto const& prep : filelist) {
+            getPrependRecordFor(prep.to_str()).addFileType(ft);
+          }
+        }
+      } else {
+        errorMessage = "prepend_include has to be a string, array or object!";
+        return;
       }
     }
 
@@ -134,4 +161,19 @@ typegrind::MethodMatcher const& AppConfig::getMethodMatcher() const { return met
 
 bool AppConfig::shouldPrependInclude() const { return !prepend_include.empty(); }
 
-std::vector<std::string> AppConfig::getPrependInclude() const { return prepend_include; }
+std::vector<std::string> AppConfig::getPrependInclude(FileType forType) const {
+  std::vector<std::string> ret;
+  for (auto const& v : prepend_include) {
+    if (v.supports(forType)) ret.push_back(v.getFileName());
+  }
+  return ret;
+}
+
+TypedFile& AppConfig::getPrependRecordFor(std::string filename) {
+  auto it = std::find_if(prepend_include.begin(), prepend_include.end(),
+                         [filename](auto& v) { return v.getFileName() == filename; });
+  if (it != prepend_include.end()) return *it;
+
+  prepend_include.push_back(TypedFile(filename, {}));
+  return prepend_include.back();
+}
