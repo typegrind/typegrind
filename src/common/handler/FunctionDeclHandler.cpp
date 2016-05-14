@@ -28,8 +28,7 @@ void FunctionDeclHandler::run(const clang::ast_matchers::MatchFinder::MatchResul
 
   if (!match) {
     // TODO: extract this to a policy class.
-    if (decl->isInlined() || decl->isInlineSpecified() ||
-    decl->hasTrivialBody()) return;
+    if (decl->isInlined() || decl->isInlineSpecified() || decl->hasTrivialBody()) return;
   }
 
   clang::Stmt* funcBody = decl->getBody();
