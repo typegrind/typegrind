@@ -3,15 +3,12 @@
 
 #include "BaseExprHandler.h"
 
-namespace typegrind
-{
-  class DeleteExprHandler : public BaseExprHandler
-  {
-  public:
-
-    DeleteExprHandler(clang::Rewriter*& rewriter, SpecializationHandler& specializationHandler);
-    void run(const clang::ast_matchers::MatchFinder::MatchResult &Result) override;
-  };
+namespace typegrind {
+class DeleteExprHandler : public BaseExprHandler {
+ public:
+  DeleteExprHandler(clang::Rewriter*& rewriter, SpecializationHandler& specializationHandler);
+  void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) override;
+};
 }
 
-#endif //TYPEGRIND_DELETEEXPRHANDLER_H
+#endif  // TYPEGRIND_DELETEEXPRHANDLER_H

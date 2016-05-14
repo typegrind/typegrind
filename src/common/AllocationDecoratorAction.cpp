@@ -1,52 +1,45 @@
 
 #include "AllocationDecoratorAction.h"
 
-namespace
-{
-  bool isCppFile(clang::CompilerInstance const& compiler)
-  {
-    clang::LangOptions const Opts = compiler.getLangOpts();
-    return Opts.CPlusPlus;
+namespace {
+bool isCppFile(clang::CompilerInstance const& compiler) {
+  clang::LangOptions const Opts = compiler.getLangOpts();
+  return Opts.CPlusPlus;
+}
+}
+
+namespace typegrind {
+
+AllocationDecoratorAction::~AllocationDecoratorAction() {
+  if (mRewriter) {
+    delete mRewriter;
   }
 }
 
-namespace typegrind
-{
+AllocationDecoratorAction::AllocationDecoratorAction(AppConfig const& appConfig)
+    : mRewriter(nullptr), mAppConfig(appConfig) {}
 
-  AllocationDecoratorAction::~AllocationDecoratorAction()
-  {
-    if(mRewriter)
-    {
-      delete mRewriter;
-    }
-  }
+bool AllocationDecoratorAction::ParseArgs(const clang::CompilerInstance& CI,
+                                          const std::vector<std::string>& arg) {
+  return isCppFile(CI);
+}
 
+// ..:: Entry point for plugins ::..
+std::unique_ptr<clang::ASTConsumer> AllocationDecoratorAction::newASTConsumer() {
+  return internalCreateConsumer(mRewriter);
+}
 
-  AllocationDecoratorAction::AllocationDecoratorAction(AppConfig const& appConfig) : mRewriter(nullptr), mAppConfig(appConfig) { }
+std::unique_ptr<clang::ASTConsumer> AllocationDecoratorAction::CreateASTConsumer(
+    clang::CompilerInstance& CI, llvm::StringRef InFile) {
+  if (isCppFile(CI)) return nullptr;
 
-  bool AllocationDecoratorAction::ParseArgs (const clang::CompilerInstance &CI, const std::vector< std::string > &arg)
-  {
-    return isCppFile(CI);
-  }
+  return internalCreateConsumer(mRewriter);
+}
 
-  // ..:: Entry point for plugins ::..
-  std::unique_ptr<clang::ASTConsumer> AllocationDecoratorAction::newASTConsumer()
-  {
-    return internalCreateConsumer(mRewriter);
-  }
+bool AllocationDecoratorAction::handleBeginSource(clang::CompilerInstance& CI,
+                                                  llvm::StringRef fileName) {
+  if (isCppFile(CI)) llvm::outs() << "cpp\n";
 
-  std::unique_ptr<clang::ASTConsumer> AllocationDecoratorAction::CreateASTConsumer(clang::CompilerInstance &CI, llvm::StringRef InFile)
-  {
-    if (isCppFile(CI)) return nullptr;
-
-    return internalCreateConsumer(mRewriter);
-  }
-
-  bool AllocationDecoratorAction::handleBeginSource(clang::CompilerInstance &CI, llvm::StringRef fileName)
-  {
-    if(isCppFile(CI))
-      llvm::outs() << "cpp\n";
-
-    return isCppFile(CI);
-  }
+  return isCppFile(CI);
+}
 }

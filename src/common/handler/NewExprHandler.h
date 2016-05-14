@@ -7,15 +7,12 @@
 
 #include "BaseExprHandler.h"
 
-namespace typegrind
-{
-  class NewExprHandler : public BaseExprHandler
-  {
-  public:
-
-    NewExprHandler(clang::Rewriter*& rewriter, SpecializationHandler& specializationHandler);
-    void run(const clang::ast_matchers::MatchFinder::MatchResult &Result) override;
-  };
+namespace typegrind {
+class NewExprHandler : public BaseExprHandler {
+ public:
+  NewExprHandler(clang::Rewriter*& rewriter, SpecializationHandler& specializationHandler);
+  void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) override;
+};
 }
 
-#endif //TYPEGRIND_CLANG_NEWEXPRHANDLER_H
+#endif  // TYPEGRIND_CLANG_NEWEXPRHANDLER_H

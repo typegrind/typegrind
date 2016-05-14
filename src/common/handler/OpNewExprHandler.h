@@ -7,15 +7,12 @@
 
 #include "BaseExprHandler.h"
 
-namespace typegrind
-{
-  class OpNewExprHandler : public BaseExprHandler
-  {
-  public:
-
-    OpNewExprHandler(clang::Rewriter*& rewriter, SpecializationHandler& specializationHandler);
-    void run(const clang::ast_matchers::MatchFinder::MatchResult &Result) override;
-  };
+namespace typegrind {
+class OpNewExprHandler : public BaseExprHandler {
+ public:
+  OpNewExprHandler(clang::Rewriter*& rewriter, SpecializationHandler& specializationHandler);
+  void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) override;
+};
 }
 
-#endif //TPHP_CLANG_OPNEWEXPRHANDLER_H
+#endif  // TPHP_CLANG_OPNEWEXPRHANDLER_H

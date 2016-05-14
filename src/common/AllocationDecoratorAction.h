@@ -6,41 +6,43 @@
 
 #include <llvm/Support/CommandLine.h>
 
-#include <clang/Frontend/FrontendPluginRegistry.h>
 #include <clang/Frontend/CompilerInstance.h>
+#include <clang/Frontend/FrontendPluginRegistry.h>
 #include <clang/Tooling/Tooling.h>
 
-#include "common/AllocationAstConsumer.h"
 #include "AppConfig.h"
+#include "common/AllocationAstConsumer.h"
 
-namespace typegrind
-{
+namespace typegrind {
 
-  class AllocationDecoratorAction : public clang::PluginASTAction, public clang::tooling::SourceFileCallbacks
-  {
-  public:
-    typedef clang::PluginASTAction base_type;
+class AllocationDecoratorAction : public clang::PluginASTAction,
+                                  public clang::tooling::SourceFileCallbacks {
+ public:
+  typedef clang::PluginASTAction base_type;
 
-    AllocationDecoratorAction & operator=(AllocationDecoratorAction const &) = delete;
+  AllocationDecoratorAction& operator=(AllocationDecoratorAction const&) = delete;
 
-    AllocationDecoratorAction(AppConfig const& appConfig);
-    ~AllocationDecoratorAction();
+  AllocationDecoratorAction(AppConfig const& appConfig);
+  ~AllocationDecoratorAction();
 
-    std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance &CI, llvm::StringRef InFile) override; // plugin
+  std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance& CI,
+                                                        llvm::StringRef InFile) override;  // plugin
 
-    std::unique_ptr<clang::ASTConsumer> newASTConsumer(); // tool
+  std::unique_ptr<clang::ASTConsumer> newASTConsumer();  // tool
 
-    bool ParseArgs (const clang::CompilerInstance &CI, const std::vector< std::string > &arg) override;
+  bool ParseArgs(const clang::CompilerInstance& CI, const std::vector<std::string>& arg) override;
 
-    bool handleBeginSource(clang::CompilerInstance &CI, llvm::StringRef fileName) override;
-  protected:
-    virtual std::unique_ptr<clang::ASTConsumer> internalCreateConsumer(clang::Rewriter*& rewriter) = 0;
+  bool handleBeginSource(clang::CompilerInstance& CI, llvm::StringRef fileName) override;
 
-    clang::Rewriter* mRewriter;
-  protected:
-    AppConfig const& mAppConfig;
-  };
+ protected:
+  virtual std::unique_ptr<clang::ASTConsumer> internalCreateConsumer(
+      clang::Rewriter*& rewriter) = 0;
 
+  clang::Rewriter* mRewriter;
+
+ protected:
+  AppConfig const& mAppConfig;
+};
 }
 
-#endif //TYPEGRIND_CLANG_ALLOCATIONDECORATORACTION_H
+#endif  // TYPEGRIND_CLANG_ALLOCATIONDECORATORACTION_H

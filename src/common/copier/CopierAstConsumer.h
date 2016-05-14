@@ -1,19 +1,18 @@
 
 #pragma once
 
-#include "common/AllocationAstConsumer.h"
 #include "DirectoryMapper.h"
+#include "common/AllocationAstConsumer.h"
 
-namespace typegrind
-{
+namespace typegrind {
 
-  class CopierAstConsumer : public AllocationASTConsumer
-  {
-  public:
-    CopierAstConsumer(clang::Rewriter*& rewriter, DirectoryMapper mapper, AppConfig const& appConfig);
-  protected:
-    void processRewriterData(clang::Rewriter*& rewriter) override;
+class CopierAstConsumer : public AllocationASTConsumer {
+ public:
+  CopierAstConsumer(clang::Rewriter*& rewriter, DirectoryMapper mapper, AppConfig const& appConfig);
 
-    DirectoryMapper mapper;
-  };
+ protected:
+  void processRewriterData(clang::Rewriter*& rewriter) override;
+
+  DirectoryMapper mapper;
+};
 }
