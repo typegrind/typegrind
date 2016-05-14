@@ -2,8 +2,13 @@
 #include "AllocationAstConsumer.h"
 
 #include <clang/ASTMatchers/ASTMatchers.h>
+#include <clang/Basic/LangOptions.h>
 
 using namespace clang;
+
+namespace {
+bool isCppFile(clang::LangOptions const& Opts) { return Opts.CPlusPlus; }
+}
 
 namespace typegrind {
 bool operator==(SpecializedInfo const& a, SpecializedInfo const& b) {
@@ -71,13 +76,17 @@ void AllocationASTConsumer::HandleTranslationUnit(ASTContext& context) {
   if (mRewriter == nullptr) {
     mRewriter = new clang::Rewriter(context.getSourceManager(), context.getLangOpts());
   }
-  mMatcher.matchAST(context);
+
+  bool isCpp = isCppFile(context.getLangOpts());
+
+  if (isCpp) mMatcher.matchAST(context);
 
   if (mAppConfig.shouldPrependInclude()) {
     auto mainFile = context.getSourceManager().getMainFileID();
     auto mainStartLocation = context.getSourceManager().getLocForStartOfFile(mainFile);
     std::string includeStmt;
-    for (std::string const& inc : mAppConfig.getPrependInclude(FileType::CPP)) {
+    for (std::string const& inc :
+         mAppConfig.getPrependInclude(isCpp ? FileType::CPP : FileType::C)) {
       includeStmt += "#include <" + inc + ">\n";
     }
     mRewriter->InsertText(mainStartLocation, includeStmt);
