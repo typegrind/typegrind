@@ -27,7 +27,7 @@ bool BaseExprHandler::isReallyDependentType(
   }
   // TODO: better!
   std::string name = baseType.getAsString(policy);
-  return name == "<dependent-type>";
+  return name == "<dependent type>";
 }
 
 void BaseExprHandler::addTypeInformationParameters(
