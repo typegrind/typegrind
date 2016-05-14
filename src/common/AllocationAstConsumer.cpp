@@ -77,7 +77,7 @@ void AllocationASTConsumer::HandleTranslationUnit(ASTContext& context) {
     auto mainFile = context.getSourceManager().getMainFileID();
     auto mainStartLocation = context.getSourceManager().getLocForStartOfFile(mainFile);
     std::string includeStmt;
-    for (std::string const& inc : mAppConfig.getPrependInclude()) {
+    for (std::string const& inc : mAppConfig.getPrependInclude(FileType::CPP)) {
       includeStmt += "#include <" + inc + ">\n";
     }
     mRewriter->InsertText(mainStartLocation, includeStmt);
