@@ -15,7 +15,7 @@ void RecordDeclHandler::run(const clang::ast_matchers::MatchFinder::MatchResult&
   if (!decl->isThisDeclarationADefinition()) return;
   if (decl->isLocalClass()) return;
 
-  auto insertPosition = decl->getRBraceLoc();
+  auto insertPosition = decl->getBraceRange().getEnd();
   if (!insertPosition.isValid()) return;
   if (!processingLocation(insertPosition)) return;
 
