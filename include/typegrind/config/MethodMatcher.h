@@ -7,6 +7,7 @@
 #include <vector>
 
 namespace typegrind {
+namespace config {
 class MethodMatcher {
  public:
   struct MethodMatch {
@@ -29,4 +30,5 @@ class MethodMatcher {
 
   std::vector<MatcherWithRegex> methods;
 };
+}
 }

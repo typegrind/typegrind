@@ -5,6 +5,7 @@
 #include "DirectoryMapping.h"
 
 namespace typegrind {
+namespace config {
 class DirectoryMapper {
  public:
   void add(std::string from, std::string to);
@@ -13,4 +14,5 @@ class DirectoryMapper {
  private:
   std::vector<DirectoryMapping> mappings;
 };
+}
 }

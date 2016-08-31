@@ -5,8 +5,10 @@
 #include <string>
 #include <vector>
 
-#include "FileType.h"
+#include "typegrind/FileType.h"
 
+namespace typegrind {
+namespace config {
 class TypedFile {
  public:
   TypedFile(std::string filename, std::initializer_list<FileType> types);
@@ -21,3 +23,5 @@ class TypedFile {
   std::string fileName;
   std::vector<FileType> fileTypes;
 };
+}
+}

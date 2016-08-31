@@ -1,5 +1,5 @@
 
-#include "AppConfig.h"
+#include "typegrind/config/AppConfig.h"
 
 #include <fstream>
 
@@ -8,6 +8,9 @@
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
+
+namespace typegrind {
+namespace config {
 
 AppConfig::AppConfig(std::string filename) : errorMessage("") {
   // try to load config
@@ -155,9 +158,9 @@ bool AppConfig::isValid() const { return errorMessage == ""; }
 
 std::string AppConfig::getErrorMessage() const { return errorMessage; }
 
-typegrind::DirectoryMapper const& AppConfig::getDirectoryMapping() const { return mapping; }
+DirectoryMapper const& AppConfig::getDirectoryMapping() const { return mapping; }
 
-typegrind::MethodMatcher const& AppConfig::getMethodMatcher() const { return methodMatches; }
+MethodMatcher const& AppConfig::getMethodMatcher() const { return methodMatches; }
 
 bool AppConfig::shouldPrependInclude() const { return !prepend_include.empty(); }
 
@@ -176,4 +179,6 @@ TypedFile& AppConfig::getPrependRecordFor(std::string filename) {
 
   prepend_include.push_back(TypedFile(filename, {}));
   return prepend_include.back();
+}
+}
 }

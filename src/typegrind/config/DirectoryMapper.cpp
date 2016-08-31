@@ -1,7 +1,8 @@
 
-#include "DirectoryMapper.h"
+#include "typegrind/config/DirectoryMapper.h"
 
 namespace typegrind {
+namespace config {
 void DirectoryMapper::add(std::string from, std::string to) { mappings.push_back({from, to}); }
 
 bool DirectoryMapper::apply(std::string& path) const {
@@ -11,5 +12,6 @@ bool DirectoryMapper::apply(std::string& path) const {
     }
   }
   return false;
+}
 }
 }

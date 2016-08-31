@@ -1,7 +1,8 @@
 
-#include "MethodMatcher.h"
+#include "typegrind/config/MethodMatcher.h"
 
 namespace typegrind {
+namespace config {
 bool MethodMatcher::add(MethodMatch method) noexcept {
   try {
     methods.push_back(MatcherWithRegex(method));
@@ -21,4 +22,5 @@ boost::optional<MethodMatcher::MethodMatch> MethodMatcher::matches(std::string q
 
 MethodMatcher::MatcherWithRegex::MatcherWithRegex(MethodMatch mm)
     : matcher(mm), real_regex(matcher.regex) {}
+}
 }

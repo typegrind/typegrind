@@ -1,8 +1,10 @@
 
-#include "TypedFile.h"
+#include "typegrind/config/TypedFile.h"
 
 #include <algorithm>
 
+namespace typegrind {
+namespace config {
 TypedFile::TypedFile(std::string filename, std::initializer_list<FileType> types)
     : fileName(fileName), fileTypes(types) {}
 
@@ -17,4 +19,6 @@ TypedFile& TypedFile::addFileType(FileType ft) {
     fileTypes.push_back(ft);
   }
   return *this;
+}
+}
 }
