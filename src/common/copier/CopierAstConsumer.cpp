@@ -4,11 +4,12 @@
 using namespace clang;
 
 #include <fstream>
-#include "FileUtils.h"
+#include "typegrind/file_utils/FileUtils.h"
 
 namespace typegrind {
-CopierAstConsumer::CopierAstConsumer(clang::Rewriter*& rewriter, DirectoryMapper mapper,
-                                     AppConfig const& appConfig)
+CopierAstConsumer::CopierAstConsumer(clang::Rewriter*& rewriter,
+                                     typegrind::config::DirectoryMapper mapper,
+                                     typegrind::config::AppConfig const& appConfig)
     : AllocationASTConsumer(rewriter, appConfig), mapper(mapper) {}
 
 void CopierAstConsumer::processRewriterData(clang::Rewriter*& rewriter) {

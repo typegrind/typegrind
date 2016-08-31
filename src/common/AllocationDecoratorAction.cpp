@@ -9,7 +9,7 @@ AllocationDecoratorAction::~AllocationDecoratorAction() {
   }
 }
 
-AllocationDecoratorAction::AllocationDecoratorAction(AppConfig const& appConfig)
+AllocationDecoratorAction::AllocationDecoratorAction(typegrind::config::AppConfig const& appConfig)
     : mRewriter(nullptr), mAppConfig(appConfig) {}
 
 bool AllocationDecoratorAction::ParseArgs(const clang::CompilerInstance& CI,

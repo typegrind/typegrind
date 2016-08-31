@@ -4,10 +4,10 @@
 #include <clang/Tooling/Tooling.h>
 #include "clang/Frontend/TextDiagnosticPrinter.h"
 
-#include "AppConfig.h"
-#include "FileUtils.h"
 #include "common/AllocationDecoratorAction.h"
 #include "common/copier/CopierAstConsumer.h"
+#include "typegrind/config/AppConfig.h"
+#include "typegrind/file_utils/FileUtils.h"
 
 using namespace clang;
 using namespace clang::tooling;
@@ -23,8 +23,8 @@ TODO
 
 class MyAction : public typegrind::AllocationDecoratorAction {
  public:
-  MyAction(typegrind::DirectoryMapper mapper, AppConfig const& appConfig)
-      : typegrind::AllocationDecoratorAction(appConfig), mapper(mapper) {}
+  MyAction(typegrind::config::DirectoryMapper mapper, typegrind::config::AppConfig const& appConfig)
+      : AllocationDecoratorAction(appConfig), mapper(mapper) {}
 
  protected:
   std::unique_ptr<clang::ASTConsumer> internalCreateConsumer(clang::Rewriter*& rewriter) override {
@@ -32,7 +32,7 @@ class MyAction : public typegrind::AllocationDecoratorAction {
   }
 
  private:
-  typegrind::DirectoryMapper mapper;
+  typegrind::config::DirectoryMapper mapper;
 };
 
 int main(int argc, const char** argv) {
@@ -46,7 +46,7 @@ int main(int argc, const char** argv) {
     return -1;
   }
 
-  AppConfig appConfig(configFilename);
+  typegrind::config::AppConfig appConfig(configFilename);
 
   if (!appConfig.isValid()) {
     llvm::errs() << appConfig.getErrorMessage() << "\n";

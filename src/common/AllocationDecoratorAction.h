@@ -10,8 +10,8 @@
 #include <clang/Frontend/FrontendPluginRegistry.h>
 #include <clang/Tooling/Tooling.h>
 
-#include "AppConfig.h"
 #include "common/AllocationAstConsumer.h"
+#include "typegrind/config/AppConfig.h"
 
 namespace typegrind {
 
@@ -22,7 +22,7 @@ class AllocationDecoratorAction : public clang::PluginASTAction,
 
   AllocationDecoratorAction& operator=(AllocationDecoratorAction const&) = delete;
 
-  AllocationDecoratorAction(AppConfig const& appConfig);
+  AllocationDecoratorAction(typegrind::config::AppConfig const& appConfig);
   ~AllocationDecoratorAction();
 
   std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance& CI,
@@ -41,7 +41,7 @@ class AllocationDecoratorAction : public clang::PluginASTAction,
   clang::Rewriter* mRewriter;
 
  protected:
-  AppConfig const& mAppConfig;
+  typegrind::config::AppConfig const& mAppConfig;
 };
 }
 

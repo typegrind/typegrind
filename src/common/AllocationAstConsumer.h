@@ -11,13 +11,13 @@
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Rewrite/Core/Rewriter.h>
 
-#include "AppConfig.h"
 #include "common/handler/DeleteExprHandler.h"
 #include "common/handler/FunctionDeclHandler.h"
 #include "common/handler/NewExprHandler.h"
 #include "common/handler/OpDeleteExprHandler.h"
 #include "common/handler/OpNewExprHandler.h"
 #include "common/handler/RecordDeclHandler.h"
+#include "typegrind/config/AppConfig.h"
 
 namespace typegrind {
 struct SpecializedInfo {
@@ -38,7 +38,7 @@ bool operator==(SpecializedInfo const& a, SpecializedInfo const& b);
 
 class AllocationASTConsumer : public clang::ASTConsumer, public SpecializationHandler {
  public:
-  AllocationASTConsumer(clang::Rewriter*& rewriter, AppConfig const& appConfig);
+  AllocationASTConsumer(clang::Rewriter*& rewriter, typegrind::config::AppConfig const& appConfig);
 
   void HandleTranslationUnit(clang::ASTContext& context) override;
 
@@ -54,7 +54,7 @@ class AllocationASTConsumer : public clang::ASTConsumer, public SpecializationHa
   clang::ast_matchers::MatchFinder mMatcher;
 
   clang::Rewriter*& mRewriter;
-  AppConfig const& mAppConfig;
+  typegrind::config::AppConfig const& mAppConfig;
 
   NewExprHandler mNewExprHandler;
   OpNewExprHandler mOpNewExprHandler;

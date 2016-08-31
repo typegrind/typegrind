@@ -16,7 +16,8 @@ bool operator==(SpecializedInfo const& a, SpecializedInfo const& b) {
          a.uniqueId == b.uniqueId;
 }
 
-AllocationASTConsumer::AllocationASTConsumer(clang::Rewriter*& rewriter, AppConfig const& appConfig)
+AllocationASTConsumer::AllocationASTConsumer(clang::Rewriter*& rewriter,
+                                             typegrind::config::AppConfig const& appConfig)
     : mRewriter(rewriter)
     , mAppConfig(appConfig)
     , mNewExprHandler(mRewriter, *this)

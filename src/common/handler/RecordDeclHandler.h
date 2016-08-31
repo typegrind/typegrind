@@ -2,7 +2,6 @@
 #pragma once
 
 #include "BaseExprHandler.h"
-#include "MethodMatcher.h"
 
 namespace typegrind {
 class RecordDeclHandler : public BaseExprHandler {

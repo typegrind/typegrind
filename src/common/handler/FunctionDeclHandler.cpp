@@ -7,7 +7,7 @@ namespace typegrind {
 
 FunctionDeclHandler::FunctionDeclHandler(clang::Rewriter*& rewriter,
                                          SpecializationHandler& specializationHandler,
-                                         MethodMatcher const& matchers)
+                                         typegrind::config::MethodMatcher const& matchers)
     : BaseExprHandler(rewriter, specializationHandler), mMatchers(matchers) {}
 
 void FunctionDeclHandler::run(const clang::ast_matchers::MatchFinder::MatchResult& result) {
