@@ -3,6 +3,9 @@ PROJECT ( typegrind )
 
 SET (TYPEGRIND_ROOT ${PROJECT_SOURCE_DIR})
 
+# always generate compilation database
+SET ( CMAKE_EXPORT_COMPILE_COMMANDS 1 )
+
 # find local boost
 
 SET ( BOOST_ROOT ${CMAKE_SOURCE_DIR}/vendor/boost-install/ )
