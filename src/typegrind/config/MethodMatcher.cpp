@@ -4,12 +4,8 @@
 namespace typegrind {
 namespace config {
 bool MethodMatcher::add(MethodMatch method) noexcept {
-  try {
-    methods.push_back(MatcherWithRegex(method));
-    return true;
-  } catch (std::regex_error e) {
-    return false;
-  }
+  methods.push_back(MatcherWithRegex(method));
+  return true;
 }
 
 boost::optional<MethodMatcher::MethodMatch> MethodMatcher::matches(std::string query) const
