@@ -7,3 +7,4 @@ logger/
 build-*
 examples-*
 __pycache__
+*.swp
