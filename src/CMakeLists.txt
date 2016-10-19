@@ -1,6 +1,5 @@
 
 
-include_directories(${Boost_INCLUDE_DIRS}) 
 include_directories(${TYPEGRIND_ROOT}/vendor/picojson/) 
 
 add_library(typegrind-core STATIC

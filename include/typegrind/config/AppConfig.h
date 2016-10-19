@@ -12,7 +12,7 @@ namespace typegrind {
 namespace config {
 class AppConfig {
  public:
-  AppConfig(std::string filename);
+  AppConfig();
 
   DirectoryMapper const& getDirectoryMapping() const;
   MethodMatcher const& getMethodMatcher() const;

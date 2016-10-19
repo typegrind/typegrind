@@ -5,10 +5,10 @@
 
 namespace typegrind {
 namespace file_utils {
-bool canonize_path(std::string originalPath, std::string& output);
+bool canonizePath(std::string OriginalPath, std::string& Output);
 
-bool ensure_directory_exists(std::string originalPath);
+bool ensureDirectoryExists(std::string OriginalPath);
 
-bool find_using_parents(std::string filename, std::string& output);
+bool findConfigUsingParents(std::string Filename, std::string& Output);
 }
 }

@@ -4,42 +4,44 @@
 
 #include <iostream>
 
+namespace fs = boost::filesystem;
+using error_code = boost::system::error_code;
+
 namespace typegrind {
 namespace file_utils {
-bool canonize_path(std::string originalPath, std::string& output) {
-  boost::system::error_code fs_error;
-  boost::filesystem::path canonicalPath = boost::filesystem::canonical(originalPath, fs_error);
-  if (!fs_error) output = canonicalPath.string();
-  return !fs_error;
+bool canonizePath(std::string OriginalPath, std::string& Output) {
+  error_code FsError;
+  fs::path CanonicalPath = fs::canonical(OriginalPath, FsError);
+  if (!FsError) Output = CanonicalPath.string();
+  return !FsError;
 }
 
-bool ensure_directory_exists(std::string filePath) {
-  boost::system::error_code fs_error;
-  boost::filesystem::path targetPath(filePath);
-  targetPath = targetPath.parent_path();
+bool ensureDirectoryExists(std::string FilePath) {
+  error_code FsError;
+  fs::path TargetPath(FilePath);
+  TargetPath = TargetPath.parent_path();
 
-  boost::filesystem::create_directories(targetPath, fs_error);
-  return !fs_error;
+  fs::create_directories(TargetPath, FsError);
+  return !FsError;
 }
 
-bool find_using_parents(std::string filename, std::string& output) {
-  try {
-    boost::filesystem::path fullFilename = boost::filesystem::system_complete(filename);
-    boost::filesystem::path directory = fullFilename.parent_path();
+bool findConfigUsingParents(std::string Filename, std::string& Output) {
+  fs::path FullFilename = fs::system_complete(Filename);
+  fs::path Directory = FullFilename.parent_path();
 
-    while (!directory.empty()) {
-      boost::filesystem::path targetConfig = directory / "/typegrind.json";
-      if (boost::filesystem::exists(targetConfig)) {
-        output = targetConfig.string();
-        return true;
-      }
+  error_code FsError;
 
-      directory = directory.parent_path();
+  while (!fs::is_empty(Directory, FsError) && !FsError) {
+    fs::path targetConfig = Directory / "/typegrind.json";
+    if (fs::exists(targetConfig)) {
+      Output = targetConfig.string();
+      return true;
     }
-  } catch (...) {
+
+    Directory = Directory.parent_path();
   }
 
   return false;
 }
-};
-};
+}
+}
