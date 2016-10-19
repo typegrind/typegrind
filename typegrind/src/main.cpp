@@ -4,8 +4,8 @@
 #include <clang/Tooling/Tooling.h>
 #include "clang/Frontend/TextDiagnosticPrinter.h"
 
-#include "common/AllocationDecoratorAction.h"
-#include "common/copier/CopierAstConsumer.h"
+#include "typegrind/clang/AllocationDecoratorAction.h"
+#include "typegrind/clang/copier/CopierAstConsumer.h"
 #include "typegrind/config/AppConfig.h"
 #include "typegrind/file_utils/FileUtils.h"
 

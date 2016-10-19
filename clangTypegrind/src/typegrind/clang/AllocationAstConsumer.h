@@ -11,12 +11,12 @@
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Rewrite/Core/Rewriter.h>
 
-#include "common/handler/DeleteExprHandler.h"
-#include "common/handler/FunctionDeclHandler.h"
-#include "common/handler/NewExprHandler.h"
-#include "common/handler/OpDeleteExprHandler.h"
-#include "common/handler/OpNewExprHandler.h"
-#include "common/handler/RecordDeclHandler.h"
+#include "handler/DeleteExprHandler.h"
+#include "handler/FunctionDeclHandler.h"
+#include "handler/NewExprHandler.h"
+#include "handler/OpDeleteExprHandler.h"
+#include "handler/OpNewExprHandler.h"
+#include "handler/RecordDeclHandler.h"
 #include "typegrind/config/AppConfig.h"
 
 namespace typegrind {

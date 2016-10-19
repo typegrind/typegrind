@@ -10,7 +10,6 @@
 #include <clang/Frontend/FrontendPluginRegistry.h>
 #include <clang/Tooling/Tooling.h>
 
-#include "common/AllocationAstConsumer.h"
 #include "typegrind/config/AppConfig.h"
 
 namespace typegrind {
