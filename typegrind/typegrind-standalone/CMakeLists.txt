@@ -2,7 +2,6 @@
 
 include_directories(${TYPEGRIND_ROOT}/typegrind/core/include/)
 include_directories(${TYPEGRIND_ROOT}/typegrind/clang-typegrind/clangTypegrind/include/)
-include_directories(${Boost_INCLUDE_DIRS})
 
 add_clang_executable(typegrind
         src/main.cpp

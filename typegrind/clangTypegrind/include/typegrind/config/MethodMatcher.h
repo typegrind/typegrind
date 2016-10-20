@@ -1,8 +1,8 @@
 
 #pragma once
 
+#include <llvm/ADT/Optional.h>
 #include <stdint.h>
-#include <boost/optional.hpp>
 #include <regex>
 #include <vector>
 
@@ -18,7 +18,7 @@ class MethodMatcher {
 
   bool add(MethodMatch method) noexcept;
 
-  boost::optional<MethodMatch> matches(std::string query) const noexcept;
+  llvm::Optional<MethodMatch> matches(std::string query) const noexcept;
 
  private:
   struct MatcherWithRegex {

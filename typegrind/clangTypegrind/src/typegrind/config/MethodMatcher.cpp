@@ -8,12 +8,12 @@ bool MethodMatcher::add(MethodMatch method) noexcept {
   return true;
 }
 
-boost::optional<MethodMatcher::MethodMatch> MethodMatcher::matches(std::string query) const
+llvm::Optional<MethodMatcher::MethodMatch> MethodMatcher::matches(std::string query) const
     noexcept {
   for (auto const& item : methods) {
     if (std::regex_match(query, item.real_regex)) return item.matcher;
   }
-  return boost::none;
+  return llvm::Optional<MethodMatcher::MethodMatch>{};
 }
 
 MethodMatcher::MatcherWithRegex::MatcherWithRegex(MethodMatch mm)

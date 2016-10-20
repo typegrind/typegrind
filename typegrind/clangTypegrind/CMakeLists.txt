@@ -16,6 +16,13 @@ add_clang_library(clang-typegrind-common STATIC
         src/typegrind/clang/AllocationAstConsumer.cpp
         src/typegrind/clang/TypegrindAction.cpp
         src/typegrind/clang/TypegrindWrapperAction.cpp
+        src/typegrind/config/AppConfig.cpp
+        src/typegrind/config/MethodMatcher.cpp
+        src/typegrind/config/DirectoryMapper.cpp
+        src/typegrind/config/DirectoryMapping.cpp
+        src/typegrind/config/TypedFile.cpp
+        src/typegrind/file_utils/FileUtils.cpp
+
   LINK_LIBS
   clangAST
   clangASTMatchers 

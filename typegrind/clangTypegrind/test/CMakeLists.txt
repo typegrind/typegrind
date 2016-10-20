@@ -1,7 +1,6 @@
 
 
 include_directories(../include) 
-include_directories(${Boost_INCLUDE_DIRS}) 
 include_directories(${GTEST_INCLUDE_DIR})
 
 add_executable(typegrind-core-tests 

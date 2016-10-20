@@ -3,12 +3,6 @@
 
 #include <fstream>
 
-#define PICOJSON_USE_INT64
-#include <picojson.h>
-
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-
 namespace typegrind {
 namespace config {
 
