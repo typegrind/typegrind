@@ -54,7 +54,7 @@ class AllocationASTConsumer : public clang::ASTConsumer, public SpecializationHa
   clang::ast_matchers::MatchFinder mMatcher;
 
   clang::Rewriter*& mRewriter;
-  typegrind::config::AppConfig const& mAppConfig;
+  typegrind::config::AppConfig mAppConfig;
 
   NewExprHandler mNewExprHandler;
   OpNewExprHandler mOpNewExprHandler;

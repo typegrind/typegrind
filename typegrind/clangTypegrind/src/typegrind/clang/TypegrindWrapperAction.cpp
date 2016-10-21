@@ -4,10 +4,12 @@
 #include "clang/Lex/PreprocessorOptions.h"
 #include "typegrind/clang/TypegrindAction.h"
 
+#include <unordered_map>
+
 namespace typegrind {
 
 bool TypegrindWrapperAction::BeginInvocation(clang::CompilerInstance &CI) {
-  std::vector<std::pair<std::string, std::string>> RewrittenFiles;
+  std::unordered_map<std::string, std::string> RewrittenFiles;
   bool err = false;
   {
     const clang::FrontendOptions &FEOpts = CI.getFrontendOpts();
@@ -18,6 +20,15 @@ bool TypegrindWrapperAction::BeginInvocation(clang::CompilerInstance &CI) {
       Typegrind->EndSourceFile();
 
       // TODO: process rewrites
+
+      auto &rewriter = Typegrind->GetRewriter();
+      for (auto it = rewriter.buffer_begin(), end = rewriter.buffer_end(); it != end; ++it) {
+        const clang::FileEntry *Entry = rewriter.getSourceMgr().getFileEntryForID(it->first);
+        if (Entry && Entry->isValid()) {
+          llvm::raw_string_ostream ofs(RewrittenFiles[Entry->tryGetRealPathName()]);
+          it->second.write(ofs);
+        }
+      }
 
       CI.setSourceManager(nullptr);
       CI.setFileManager(nullptr);
@@ -31,9 +42,10 @@ bool TypegrindWrapperAction::BeginInvocation(clang::CompilerInstance &CI) {
   CI.getDiagnostics().Reset();
 
   clang::PreprocessorOptions &PPOpts = CI.getPreprocessorOpts();
-  PPOpts.RemappedFiles.insert(PPOpts.RemappedFiles.end(), RewrittenFiles.begin(),
-                              RewrittenFiles.end());
-  PPOpts.RemappedFilesKeepOriginalName = false;
+  for (auto pair : RewrittenFiles) {
+    PPOpts.addRemappedFile(pair.first,
+                           llvm::MemoryBuffer::getMemBufferCopy(pair.second, pair.first).release());
+  }
 
   return true;
 }

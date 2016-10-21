@@ -2,7 +2,7 @@
 include_directories(${TYPEGRIND_ROOT}/typegrind/core/include/)
 include_directories(include/)
 
-add_clang_library(clang-typegrind-common STATIC
+add_clang_library(clangTypegrind STATIC
   #src/typegrind/clang/copier/CopierAstConsumer.cpp
   #src/typegrind/clang/expander/MacroExpanderAction.cpp
         src/typegrind/clang/handler/BaseExprHandler.cpp
@@ -31,4 +31,4 @@ add_clang_library(clang-typegrind-common STATIC
 )
 
 
-set_property(TARGET clang-typegrind-common PROPERTY CXX_STANDARD 14)
+set_property(TARGET clangTypegrind PROPERTY CXX_STANDARD 14)

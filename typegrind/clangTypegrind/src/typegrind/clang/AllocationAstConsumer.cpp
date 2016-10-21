@@ -24,7 +24,7 @@ AllocationASTConsumer::AllocationASTConsumer(clang::Rewriter*& rewriter,
     , mOpNewExprHandler(mRewriter, *this)
     , mOpDeleteExprHandler(mRewriter, *this)
     , mDeleteExprHandler(mRewriter, *this)
-    , mFunctionDeclHandler(mRewriter, *this, appConfig.getMethodMatcher())
+    , mFunctionDeclHandler(mRewriter, *this, mAppConfig.getMethodMatcher())
     , mRecordDeclHandler(mRewriter, *this)
 
 {

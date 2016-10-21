@@ -22,6 +22,8 @@ class TypegrindAction : public clang::SyntaxOnlyAction {
   TypegrindAction();
   ~TypegrindAction();
 
+  clang::Rewriter const& GetRewriter() const { return *mRewriter; }
+
  protected:
   std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance& CI,
                                                         llvm::StringRef InFile) override;
