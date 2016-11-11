@@ -1,11 +1,21 @@
 
 #include "typegrind/file_utils/FileUtils.h"
+#if defined _MSC_VER
+// Typegrind requires VS "15"
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+using error_code = std::error_code;
+#elif __has_include("experimental/filesystem")
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+using error_code = std::error_code;
+#elif __has_include("boost/filesystem.hpp")
 #include <boost/filesystem.hpp>
-
-#include <iostream>
-
 namespace fs = boost::filesystem;
 using error_code = boost::system::error_code;
+#else
+#error Typegrind requires std::experimental::filesystem or boost::filesystem
+#endif
 
 namespace typegrind {
 namespace file_utils {
