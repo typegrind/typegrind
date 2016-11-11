@@ -1,7 +1,3 @@
-[submodule "vendor/boost"]
-	path = vendor/boost
-	url = https://github.com/boostorg/boost.git
-	ignore = dirty
 [submodule "vendor/llvm"]
 	path = vendor/llvm
 	url = https://github.com/typegrind/llvm.git
