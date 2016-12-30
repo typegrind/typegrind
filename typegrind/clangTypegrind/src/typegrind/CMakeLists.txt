@@ -25,6 +25,6 @@ add_clang_library(clangTypegrind STATIC
   clangASTMatchers 
   clangRewrite
 )
-
+set_target_properties(clangTypegrind PROPERTIES FOLDER "Typegrind")
 
 set_property(TARGET clangTypegrind PROPERTY CXX_STANDARD 14)

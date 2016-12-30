@@ -1,12 +1,10 @@
 Typegrind
 ===
 
-Typegrind is a type preserving heap profiler for C++ - it collects memory allocation information with type information.
+Typegrind is a type preserving instrumentation tool for C++, built on top of Clang.
 
-Documentation
----
-
-Documentation can be found at http://typegrind.github.io/
+* Homepage: http://typegrind.github.io/
+* Wiki: http://typegrind.atlassian.net/wiki
 
 Credits
 ---
