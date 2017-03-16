@@ -1,2 +1,2 @@
-mklink /j %~dp0\vendor\llvm\tools\clang\lib\Typegrind %~dp0\..\typegrind\clangTypegrind\src\typegrind
+mklink /j %~dp0\vendor\llvm\tools\clang\lib\typegrind %~dp0\..\typegrind\clangTypegrind\src\typegrind
 mklink /j %~dp0\vendor\llvm\tools\clang\include\typegrind %~dp0\..\typegrind\clangTypegrind\include\typegrind
